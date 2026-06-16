@@ -1,0 +1,180 @@
+{% set bantuan_halaman = "aktivitas" %}
+{% extends "app_base.html" %}
+{% block title %}Aktivitas | Zona Radikal{% endblock %}
+
+{% block page_content %}
+{% set form_data = form_data|default({}) %}
+{% set radioisotop_options = ["Co-60", "Cs-137", "Ir-192"] %}
+{% set satuan_options = [
+  ("Bq", "Bq"),
+  ("kBq", "kBq"),
+  ("MBq", "MBq"),
+  ("GBq", "GBq"),
+  ("TBq", "TBq"),
+  ("Ci", "Ci"),
+  ("mCi", "mCi"),
+  ("uCi", "µCi")
+] %}
+
+<section class="Page Page-Aktivitas">
+
+  <section class="Page-Header">
+    <h1 class="Page-Title">Aktivitas Sumber Radiasi</h1>
+    <p class="Page-Desc">
+      Aktivitas sumber radiasi saat ini dihitung berdasarkan aktivitas awal, jenis
+      radioisotop, waktu paruh, dan selang waktu peluruhan.
+    </p>
+
+    <div class="Page-Regulasi-List">
+      <p class="Page-Regulasi-Card">
+        Berdasarkan Perka BAPETEN No. 7 Tahun 2013 Pasal 1 ayat (1), radioaktivitas
+        adalah jumlah inti radioaktif yang mengalami proses peluruhan per satuan waktu.
+      </p>
+
+      <p class="Page-Regulasi-Card">
+        PP RI No. 45 Tahun 2023 Pasal 1 ayat (9) menjelaskan bahwa sumber radioaktif
+        adalah zat radioaktif berbentuk padat yang terbungkus permanen dalam kapsul
+        yang terikat kuat.
+      </p>
+    </div>
+  </section>
+
+    <form method="POST" action="{{ url_for('main.aktivitas') }}" class="Aktivitas-Form">
+      <div class="Aktivitas-Top-Grid">
+    
+        <!-- === RADIOISOTOP === -->
+        <div class="Input-Field">
+          <label class="Aktivitas-Label">Pilih Radioisotop</label>
+        
+          <div class="Aktivitas-Option-Group">
+            {% for radioisotop in radioisotop_options %}
+              <label class="Aktivitas-Option">
+                <input type="radio" name="radioisotop" value="{{ radioisotop }}"
+                  {% if form_data.get("radioisotop") == radioisotop %}checked{% endif %}
+                  {% if loop.first %}required{% endif %}>
+                <span>{{ radioisotop }}</span>
+              </label>
+            {% endfor %}
+          </div>
+        
+          <small class="Input-Info">Pilih radioisotop sesuai sumber yang akan dihitung.</small>
+        </div>
+
+        <!-- === AKTIVITAS === -->
+        <div class="Input-Field">
+          <label for="aktivitas_awal" class="Aktivitas-Label">Aktivitas Awal</label>
+          <input type="number" name="aktivitas_awal" id="aktivitas_awal" class="Aktivitas-Input"
+            value="{{ form_data.get('aktivitas_awal', '') }}" min="0.001" max="500" step="any" required>
+          <small id="aktivitasInfo" class="Input-Info">Masukkan aktivitas pada tanggal sertifikat sumber.</small>
+        </div>
+
+        <!-- === SATUAN === -->
+        <div class="Aktivitas-Satuan-Group">
+
+          <div class="Input-Field">
+            <label for="satuan_awal" class="Aktivitas-Label">Satuan Awal</label>
+            <select name="satuan_awal" id="satuan_awal" class="Aktivitas-Input Aktivitas-Select" required>
+              {% for value, label in satuan_options %}
+                <option value="{{ value }}"
+                  {% if form_data.get("satuan_awal", "Ci") == value %}selected{% endif %}>{{ label }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="Input-Field">
+            <label for="satuan_hasil" class="Aktivitas-Label">Satuan Hasil</label>
+            <select name="satuan_hasil" id="satuan_hasil" class="Aktivitas-Input Aktivitas-Select" required>
+              {% for value, label in satuan_options %}
+                <option value="{{ value }}"
+                  {% if form_data.get("satuan_hasil", "Ci") == value %}selected{% endif %}>{{ label }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- === TANGGAL === -->
+      <div class="Aktivitas-Row-Tanggal">
+
+        <div class="Input-Field">
+          <label for="tanggal_awal" class="Aktivitas-Label">Tanggal Sertifikat Sumber</label>
+          <input type="date" name="tanggal_awal" id="tanggal_awal"
+            class="Aktivitas-Input" value="{{ form_data.get('tanggal_awal', '') }}" required>
+          <small class="Input-Info">Gunakan tanggal pada sertifikat sumber.</small>
+        </div>
+
+        <div class="Input-Field">
+          <label for="tanggal_hitung" class="Aktivitas-Label">Tanggal Perhitungan</label>
+          <input type="date" name="tanggal_hitung" id="tanggal_hitung"
+            class="Aktivitas-Input" value="{{ form_data.get('tanggal_hitung', '') }}" required>
+          <small id="tanggalHitungInfo" class="Input-Info">Gunakan tanggal saat aktivitas ingin diketahui.</small>
+        </div>
+
+      </div>
+
+      <!-- === KETERANGAN === -->
+      <div class="Input-Field">
+        <label for="keterangan" class="Aktivitas-Label">Keterangan</label>
+        <input type="text" name="keterangan" id="keterangan"
+          class="Aktivitas-Input" value="{{ form_data.get('keterangan', '') }}" maxlength="255">
+        <small class="Input-Info">Opsional, digunakan untuk membedakan riwayat perhitungan.</small>
+      </div>
+
+      <!-- === HITUNG RESET === -->
+      <div class="Cal-Action">
+        <button type="submit" class="Button-Primary">Hitung</button>
+        <a href="{{ url_for('main.aktivitas') }}" class="Button-Reset">Reset</a>
+      </div>
+
+    </form>
+
+    <!-- === HASIL === -->
+    {% if hasil %}
+    {% set satuan_awal_tampil = "µCi" if hasil.satuan_awal == "uCi" else hasil.satuan_awal %}
+    {% set satuan_hasil_tampil = "µCi" if hasil.satuan_hasil == "uCi" else hasil.satuan_hasil %}
+
+    <section class="Cal-Result">
+      <h2 class="Cal-Result-Title">Hasil Perhitungan Aktivitas</h2>
+
+      <div class="Cal-Result-Grid">
+
+        <div class="Cal-Result-Card">
+          <span class="Cal-Result-Label">Radioisotop</span>
+          <span class="Cal-Result-Value">{{ hasil.radioisotop }}</span>
+        </div>
+
+        <div class="Cal-Result-Card">
+          <span class="Cal-Result-Label">Aktivitas Awal</span>
+          <span class="Cal-Result-Value">{{ form_data.get("aktivitas_awal") }} {{ satuan_awal_tampil }}</span>
+        </div>
+
+        <div class="Cal-Result-Card">
+          <span class="Cal-Result-Label">Waktu Paruh</span>
+          <span class="Cal-Result-Value">{{ hasil.waktu_paruh_hari }} hari</span>
+        </div>
+
+        <div class="Cal-Result-Card">
+          <span class="Cal-Result-Label">Aktivitas Saat Ini</span>
+          <span class="Cal-Result-Value">{{ hasil.hasil_aktivitas }} {{ satuan_hasil_tampil }}</span>
+        </div>
+
+        <div class="Cal-Result-Card">
+          <span class="Cal-Result-Label">Selang Waktu</span>
+          <span class="Cal-Result-Value">{{ hasil.selang_hari }} hari</span>
+        </div>
+
+        <div class="Cal-Result-Card">
+          <span class="Cal-Result-Label">Tanggal Perhitungan</span>
+          <span class="Cal-Result-Value">{{ hasil.tanggal_hitung }}</span>
+        </div>
+
+      </div>
+    </section>
+    {% endif %}
+
+</section>
+
+{% endblock %}

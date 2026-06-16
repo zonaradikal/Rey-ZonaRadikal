@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+{% block title %}Admin | Zona Radikal{% endblock %}
+
+{% block content %}
+<div class="App-Wrapper-Admin">
+  {% include "components/navbar.html" %}
+  <div class="App-Layout-Admin">
+    <main class="App-Content-Admin">
+
+      {% block page_content %}
+      <div class="Admin-Page">
+
+        <div class="Page-Header">
+          <h1>Panel Admin</h1>
+          <p class="Page-Desc">Kelola verifikasi pengguna dan monitoring session sistem.</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="Flash-Message {{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <!-- === STATISTIK === -->
+        <div class="Admin-Stats">
+          <div class="Stat-Card">
+            <h3>{{ total_users }}</h3>
+            <p>Total Pengguna</p>
+          </div>
+          <div class="Stat-Card">
+            <h3>{{ pending_count }}</h3>
+            <p>Menunggu Verifikasi</p>
+          </div>
+          <div class="Stat-Card">
+            <h3>{{ active_count }}</h3>
+            <p>Pengguna Aktif</p>
+          </div>
+          <div class="Stat-Card">
+            <h3>{{ rejected_count }}</h3>
+            <p>Ditolak</p>
+          </div>
+          <div class="Stat-Card">
+            <h3>{{ admin_count }}</h3>
+            <p>Admin</p>
+          </div>
+        </div>
+
+        <!-- === DAFTAR PENGGUNA === -->
+        <div class="Admin-Card">
+          <div class="Admin-Section-Header">
+            <h2 class="Admin-Section-Title">Daftar Pengguna</h2>
+            <span class="Admin-Count">{{ all_users|length }} Pengguna</span>
+          </div>
+
+          {% if all_users %}
+          <div class="Admin-Table-Wrapper">
+            <table class="Admin-Table">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Nama Lengkap</th>
+                  <th>Username</th>
+                  <th>No. Sertifikat PPR</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Dibuat</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for user in all_users %}
+                <tr>
+                  <td>{{ loop.index }}</td>
+                  <td>{{ user.full_name }}</td>
+                  <td>{{ user.username }}</td>
+                  <td>{{ user.no_sertifikat_ppr or "-" }}</td>
+                  <td>
+                    {% if user.role == "admin" %}
+                      <span class="Status-Badge Online">Admin</span>
+                    {% else %}
+                      <span class="Status-Badge Offline">User</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if user.status == "active" %}
+                      <span class="Status-Badge Online">Aktif</span>
+                    {% elif user.status == "pending" %}
+                      <span class="Status-Badge Pending">Pending</span>
+                    {% else %}
+                      <span class="Status-Badge Offline">Ditolak</span>
+                    {% endif %}
+                  </td>
+                  <td>{{ user.created_at.strftime("%d-%m-%Y") }}</td>
+                  <td>
+                    {% if user.role != "admin" %}
+                    <div class="Action-Buttons">
+                      
+                      {% if user.status == "pending" %}
+                      <form action="{{ url_for('admin.change_status', user_id=user.id, status='active') }}" method="POST">
+                        <button type="submit" class="Approve-Btn">Aktifkan</button>
+                      </form>
+                      <form action="{{ url_for('admin.change_status', user_id=user.id, status='rejected') }}" method="POST">
+                        <button type="submit" class="Reject-Btn">Tolak</button>
+                      </form>
+
+                      {% elif user.status == "active" %}
+
+                      <form action="{{ url_for('admin.change_status', user_id=user.id, status='rejected') }}" method="POST">
+                        <button type="submit" class="Reject-Btn">Nonaktifkan</button>
+                      </form>
+
+                      {% elif user.status == "rejected" %}
+                      <form action="{{ url_for('admin.change_status', user_id=user.id, status='active') }}" method="POST">
+                        <button type="submit" class="Approve-Btn">Aktifkan Lagi</button>
+                      </form>
+                      {% endif %}
+                    </div>
+                    {% else %}
+                    -
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          {% else %}
+          <div class="Admin-Empty">Belum ada pengguna terdaftar.</div>
+          {% endif %}
+        </div>
+
+        <!-- === MONITORING SESSION === -->
+        <div class="Admin-Card">
+          <div class="Admin-Section-Header">
+            <h2 class="Admin-Section-Title">Monitoring Session</h2>
+            <span class="Admin-Count">{{ sessions|length }} Session</span>
+          </div>
+
+          {% if sessions %}
+          <div class="Admin-Table-Wrapper">
+            <table class="Admin-Table">
+
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Username</th>
+                  <th>Login</th>
+                  <th>Logout</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for s in sessions %}
+                <tr>
+                  <td>{{ loop.index }}</td>
+                  <td>{{ s.user.username }}</td>
+                  <td>{{ s.login_at }}</td>
+                  <td>{{ s.logout_at or "-" }}</td>
+
+                  <td>
+                    {% if s.is_online %}
+                      <span class="Status-Badge Online">Online</span>
+                    {% else %}
+                      <span class="Status-Badge Offline">Offline</span>
+                    {% endif %}
+                  </td>
+
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          {% else %}
+          <div class="Admin-Empty">Belum ada data session.</div>
+          {% endif %}
+        </div>
+      </div>
+
+      {% endblock %}
+    </main>
+  </div>
+  
+</div>
+{% endblock %}

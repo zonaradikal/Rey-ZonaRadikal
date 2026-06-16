@@ -1,0 +1,295 @@
+/* =========================
+   TAMPILAN PC
+========================= */
+.Page-Riwayat {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+}
+.Page-Riwayat .Page-Header, .Page-Riwayat .Page-Desc {
+  margin-bottom: 0;
+}
+
+/* === TOOLBAR === */
+.Riwayat-Toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 17px;
+  width: 100%;
+}
+
+/* === TAB === */
+.Riwayat-Tabs {
+  display: flex;
+  flex: 1;
+  gap: 13px;
+  min-width: 0;
+}
+.Riwayat-Tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 7px 11px;
+  border: 3px solid var(--color-blue);
+  border-radius: 17px;
+  background-color: var(--color-offwhite);
+  color: var(--color-blue);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.Riwayat-Tab.is-active {
+  background-color: var(--color-blue);
+  color: var(--color-offwhite);
+}
+
+/* === SEARCH === */
+.Riwayat-Search {
+  width: 300px;
+  max-width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.Riwayat-Search-Icon {
+  position: absolute;
+  left: 13px;
+  width: 21px;
+  height: 21px;
+  object-fit: contain;
+  pointer-events: none;
+}
+.Riwayat-Search-Input {
+  width: 100%;
+  min-height: 41px;
+  padding: 10px 13px 10px 41px;
+  border: 3px solid var(--color-yellow);
+  border-radius: 17px;
+  background-color: var(--color-offwhite);
+  color: var(--color-blue);
+  font-size: 13px;
+  font-weight: 600;
+  outline: none;
+}
+.Riwayat-Search-Input::placeholder {
+  color: var(--color-blue);
+  opacity: 0.7;
+}
+.Riwayat-Search-Input:focus {
+  border-color: var(--color-yellow);
+}
+
+/* === PANEL === */
+.Riwayat-Panel {
+  display: none;
+}
+.Riwayat-Panel.is-active {
+  display: flex;
+  flex-direction: column;
+}
+
+.Riwayat-Section-Header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 13px;
+  background-color: var(--color-blue);
+  width: 100%;
+  padding: 11px 17px;
+  border-top-left-radius: 13px;
+  border-top-right-radius: 13px;
+}
+.Riwayat-Section-Title {
+  color: var(--color-offwhite);
+  font-size: 21px;
+  font-weight: 700;
+}
+.Riwayat-Count {
+  color: var(--color-cream);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* === TABLE === */
+.Riwayat-Table-Wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 3px solid var(--color-blue);
+  background-color: var(--color-offwhite);
+  margin-bottom: 13px;
+}
+.Riwayat-Table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.Riwayat-Table th {
+  padding: 7px;
+  border: 1px solid var(--color-blue);
+  background-color: var(--color-blue);
+  color: var(--color-offwhite);
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 1.3;
+}
+.Riwayat-Table td {
+  padding: 7px;
+  border: 1px solid var(--color-blue);
+  color: var(--color-blue);
+  font-size: 13px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 1.3;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+.Riwayat-Table th:first-child, .Riwayat-Table td:first-child {
+  width: 17%;
+}
+.Riwayat-Table th:last-child,.Riwayat-Table td:last-child {
+  width: 70px;
+  text-align: center;
+}
+
+.Riwayat-Table tbody tr:nth-child(odd) td {
+  background-color: var(--color-offwhite);
+}
+.Riwayat-Table tbody tr:nth-child(even) td {
+  background-color: var(--color-lightblue);
+}
+
+/* === ACTION === */
+.Riwayat-Action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 7px;
+  border-radius: 7px;
+  background-color: var(--color-cream);
+  color: var(--color-blue);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* === PAGINATION === */
+.Riwayat-Pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+.Riwayat-Page {
+  min-width: 37px;
+  min-height: 37px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid var(--color-blue);
+  border-radius: 13px;
+  background-color: var(--color-offwhite);
+  color: var(--color-blue);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.Riwayat-Page.is-active {
+  background-color: var(--color-yellow);
+  color: var(--color-blue);
+}
+.Riwayat-Page-Nav {
+  padding: 0 13px;
+}
+.Riwayat-Page:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* === EMPTY === */
+.Riwayat-Empty {
+  padding: 21px;
+  background-color: var(--color-cream);
+  color: var(--color-blue);
+  font-size: 13px;
+  line-height: 1.7;
+}
+.Riwayat-Empty-Search td {
+  padding: 11px;
+  font-size: 11px;
+}
+
+/* =========================
+   TAMPILAN MOBILE
+========================= */
+@media (max-width: 600px) {
+  .Riwayat-Toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 11px;
+  }
+  .Riwayat-Tabs {
+    width: 100%;
+    gap: 7px;
+  }
+  .Riwayat-Tab, .Riwayat-Search-Input ,
+  .Riwayat-Action, .Riwayat-Empty-Search td {
+    font-size: 11px;
+  }
+
+  .Riwayat-Search {
+    width: 100%;
+  }
+  .Riwayat-Search-Icon {
+    left: 11px;
+    width: 15px;
+    height: 15px;
+  }
+  .Riwayat-Search-Input {
+    padding: 9px 13px 9px 35px;
+    border-radius: 13px;
+  }
+
+  .Riwayat-Section-Header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .Riwayat-Section-Title {
+    font-size: 17px;
+  }
+  .Riwayat-Count {
+    padding: 7px 11px;
+    font-size: 11px;
+    align-self: flex-end;
+  }
+  .Riwayat-Page {
+    min-width: 31px;
+    min-height: 31px;
+    font-size: 11px;
+  }
+
+  .Riwayat-Table {
+    width: max-content;
+    min-width: 850px;
+    table-layout: auto;
+  }
+  .Riwayat-Table th, .Riwayat-Table td {
+    font-size: 11px;
+    line-height: 1.3;
+  }
+  
+  .Riwayat-Table th:first-child, .Riwayat-Table td:first-child {
+    min-width: 130px;
+  }
+  .Riwayat-Table th:last-child, .Riwayat-Table td:last-child {
+    min-width: 70px;
+  }
+}

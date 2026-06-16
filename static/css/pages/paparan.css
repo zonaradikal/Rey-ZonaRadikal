@@ -1,0 +1,170 @@
+/* =========================
+   TAMPILAN PC
+========================= */
+.Page-Paparan {
+  width: 95%;
+  margin: auto;
+  padding: 0;
+}
+
+/* === FORM === */
+.Paparan-Form {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+/* === GRID === */
+.Paparan-Grid-Kondisi {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 0.7fr);
+  gap: 17px;
+  align-items: end;
+}
+.Paparan-Grid-Data {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr) minmax(0, 1.3fr) minmax(0, 0.7fr);
+  gap: 17px;
+  align-items: end;
+}
+.Paparan-Perisai-Grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 17px;
+}
+
+/* === LABEL === */
+.Paparan-Label {
+  color: var(--color-blue);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* === INPUT === */
+.Paparan-Input, .Paparan-Select {
+  width: 100%;
+  min-height: 25px;
+  padding: 7px 17px;
+  border: 3px solid var(--color-blue);
+  border-radius: 17px;
+  background-color: var(--color-offwhite);
+  color: var(--color-blue);
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  outline: none;
+}
+.Paparan-Input::placeholder {
+  color: var(--color-grey);
+}
+.Paparan-Select {
+  cursor: pointer;
+}
+.Paparan-Input:focus,
+.Paparan-Select:focus {
+  border-color: var(--color-yellow);
+}
+
+/* === KONDISI PAPARAN === */
+.Paparan-Option-Group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 13px;
+}
+.Paparan-Option {
+  position: relative;
+  cursor: pointer;
+}
+.Paparan-Option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.Paparan-Option span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 25px;
+  padding: 7px 21px;
+  border: 3px solid var(--color-blue);
+  border-radius: 17px;
+  background-color: var(--color-offwhite);
+  color: var(--color-blue);
+  font-size: 13px;
+  font-weight: 500;
+  transition: 300ms ease;
+}
+.Paparan-Option:hover span {
+  border-color: var(--color-yellow);
+}
+.Paparan-Option input:checked + span {
+  border-color: var(--color-yellow);
+  background-color: var(--color-yellow);
+  color: var(--color-offwhite);
+}
+
+/* === DATA PERISAI === */
+.Paparan-Perisai {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+.Paparan-Section-Title {
+  margin: 0;
+  color: var(--color-blue);
+  font-size: 17px;
+  font-weight: 700;
+}
+
+/* =========================
+   TAMPILAN MOBILE
+========================= */
+@media (max-width: 600px) {
+  .Paparan-Form {
+    gap: 13px;
+  }
+
+  .Paparan-Grid-Kondisi {
+    grid-template-columns: 1fr 1fr;
+    gap: 13px;
+  }
+  .Paparan-Grid-Kondisi > .Input-Field:first-child,
+  .Paparan-Grid-Kondisi > .Input-Field:nth-child(2) {
+    grid-column: 1 / -1;
+  }
+
+  .Paparan-Grid-Data {
+    grid-template-columns: 1.3fr .7fr;
+    gap: 13px;
+  }
+  .Paparan-Grid-Kondisi {
+    grid-template-columns: 1.3fr .7fr;
+    gap: 13px;
+  }
+  .Paparan-Perisai-Grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 13px;
+  }
+
+  .Paparan-Input, .Paparan-Select {
+    padding: 7px 13px;
+    font-size: 11px;
+  }
+  .Paparan-Label, .Paparan-Option span {
+    font-size: 11px;
+  }
+  .Paparan-Option-Group {
+    gap: 11px;
+    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 11px;
+  }
+  .Paparan-Option span {
+    width: 100%;
+    padding: 7px 13px;
+  }
+  .Paparan-Section-Title {
+    font-size: 13px;
+  }
+}

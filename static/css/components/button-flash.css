@@ -1,0 +1,65 @@
+/* =========================
+   TAMPILAN PC
+========================= */
+/* === TOMBOL UTAMA & RESET === */
+.Button-Primary, .Button-Reset {
+  padding: 11px 21px;
+  border: none;
+  border-radius: 25px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 300ms ease-in-out;
+}
+
+.Button-Primary {
+  background-color: var(--color-blue);
+  color: var(--color-offwhite);
+}
+.Button-Primary:hover {
+  background-color: var(--color-yellow);
+}
+
+.Button-Reset {
+  display: inline-block;
+  background-color: var(--color-cream);
+  color: var(--color-blue);
+  text-decoration: none;
+}
+.Button-Reset:hover {
+  background-color: var(--color-yellow);
+}
+
+/* === NOTIFIKASI === */
+.Flash-Message {
+  margin: 7px 0px;
+  padding: 7px;
+  border-radius: 17px;
+  font-size: 13px;
+  text-align: center;
+}
+.Flash-Message.error {
+  border: 1px solid var(--color-yellow);
+  background-color: var(--color-yellow);
+  color: var(--color-offwhite);
+}
+.Flash-Message.success {
+  border: 1px solid var(--color-blue);
+  background-color: var(--color-lightblue);
+  color: var(--color-blue);
+}
+
+/* =========================
+   TAMPILAN MOBILE
+========================= */
+@media (max-width: 600px) {
+  .Button-Primary, .Button-Reset {
+    border-radius: 21px;
+    font-size: 11px;
+  }
+  .Flash-Message {
+    border-radius: 13px;
+    font-size: 11px;
+    line-height: 17px;
+  }
+}

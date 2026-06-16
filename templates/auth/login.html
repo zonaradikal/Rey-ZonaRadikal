@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Login | Zona Radikal{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+  <div class="auth-card">
+    <h1>Selamat Datang!</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="Flash-Message {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('auth.login') }}" method="POST" class="auth-form">
+      <div class="form-input">
+        <label for="login_id">Username</label>
+        <input
+          type="text"
+          id="login_id"
+          name="login_id"
+          placeholder="Masukkan Username"
+          required
+          data-required="Username wajib diisi."
+        />
+      </div>
+
+      <div class="form-input">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Masukkan Password"
+          required
+          data-required="Password wajib diisi."
+        />
+        <button type="button" class="toggle-password" aria-label="Tampilkan password"> <i class="fa-solid fa-eye"></i> </button>
+      </div>
+
+      <button type="submit" class="auth-button">Masuk</button>
+    </form>
+
+    <p class="auth-switch"> Belum punya akun? <a href="{{ url_for('auth.register') }}">Daftar!</a> </p>
+  </div>
+</div>
+{% endblock %} 
+{% block extra_js %} <script src="{{ url_for('static', filename='js/auth.js') }}" defer></script> {% endblock %}

@@ -1,0 +1,240 @@
+{% set bantuan_halaman = "riwayat" %}
+{% extends "app_base.html" %}
+{% block title %}Riwayat | Zona Radikal{% endblock %}
+
+{% block page_content %}
+{% set riwayat_aktivitas = riwayat_aktivitas|default([]) %}
+{% set riwayat_paparan = riwayat_paparan|default([]) %}
+{% set riwayat_daerah = riwayat_daerah|default([]) %}
+{% set tab_aktif = request.args.get("tab", "aktivitas") if request is defined else "aktivitas" %}
+{% if tab_aktif not in ["aktivitas", "paparan", "daerah"] %}
+  {% set tab_aktif = "aktivitas" %}
+{% endif %}
+
+<section class="Page Page-Riwayat">
+
+  <section class="Page-Header">
+    <h1 class="Page-Title">Riwayat Perhitungan</h1>
+    <p class="Page-Desc">
+      Lihat kembali hasil perhitungan aktivitas, laju paparan, dan daerah radiasi yang pernah dilakukan.
+    </p>
+  </section>
+
+  <!-- === TAB & PENCARIAN RIWAYAT === -->
+<section class="Riwayat-Toolbar">
+
+  <!-- === TAB RIWAYAT === -->
+  <section class="Riwayat-Tabs" aria-label="Kategori riwayat">
+    <button
+      type="button"
+      class="Riwayat-Tab {% if tab_aktif == 'aktivitas' %}is-active{% endif %}"
+      data-tab="aktivitas">
+      Aktivitas Sumber
+    </button>
+    <button
+      type="button"
+      class="Riwayat-Tab {% if tab_aktif == 'paparan' %}is-active{% endif %}"
+      data-tab="paparan">
+      Laju Paparan
+    </button>
+    <button
+      type="button"
+      class="Riwayat-Tab {% if tab_aktif == 'daerah' %}is-active{% endif %}"
+      data-tab="daerah">
+      Daerah Kerja
+    </button>
+  </section>
+
+  <!-- === PENCARIAN RIWAYAT === -->
+  <section class="Riwayat-Search">
+    <img
+      src="{{ url_for('static', filename='images/Search.png') }}"
+      alt="Ikon pencarian"
+      class="Riwayat-Search-Icon">
+    <input
+      type="text"
+      id="riwayatSearch"
+      class="Riwayat-Search-Input"
+      placeholder="Cari kata kunci"
+      autocomplete="off">
+  </section>
+
+</section>
+
+
+  <!-- === TAB AKTIVITAS === -->
+  <section class="Riwayat-Panel {% if tab_aktif == 'aktivitas' %}is-active{% endif %}"data-panel="aktivitas">
+
+    <div class="Riwayat-Section-Header">
+      <h2 class="Riwayat-Section-Title">Riwayat Aktivitas Sumber Radiasi</h2>
+      <span class="Riwayat-Count">{{ riwayat_aktivitas|length }} data</span>
+    </div>
+
+    {% if riwayat_aktivitas %}
+    <div class="Riwayat-Table-Wrapper">
+      <table class="Riwayat-Table">
+
+        <thead>
+          <tr>
+            <th>Keterangan</th>
+            <th>Radioisotop</th>
+            <th>Aktivitas Awal</th>
+            <th>Tanggal Awal</th>
+            <th>Tanggal Hitung</th>
+            <th>Selang Hari</th>
+            <th>Hasil Aktivitas</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for item in riwayat_aktivitas %}
+          {% set aktivitas_awal_value = item.aktivitas_awal_input if item.aktivitas_awal_input is defined else item.aktivitas_awal %}
+          {% set satuan_awal_value = item.satuan_awal|default(item.satuan|default(""), true) %}
+          {% set satuan_hasil_value = item.satuan_hasil|default(item.satuan|default(""), true) %}
+
+          <tr>
+            <td>{{ item.keterangan or "-" }}</td>
+            <td>{{ item.radioisotop }}</td>
+            <td>{{ aktivitas_awal_value }} {{ satuan_awal_value|replace("uCi", "µCi") }}</td>
+            <td>{{ item.tanggal_awal.strftime("%d-%m-%Y") }}</td>
+            <td>{{ item.tanggal_hitung.strftime("%d-%m-%Y") }}</td>
+            <td>{{ item.selang_hari }} hari</td>
+            <td>{{ item.hasil_aktivitas|round(3) }} {{ satuan_hasil_value|replace("uCi", "µCi") }}</td>
+            <td>
+              <a href="{{ url_for('main.gunakan_riwayat', jenis='aktivitas', riwayat_id=item.id) }}"
+                class="Riwayat-Action">Pakai</a>
+            </td>
+          </tr>
+
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="Riwayat-Empty">Belum ada riwayat perhitungan aktivitas sumber.</p>
+    {% endif %}
+
+  </section>
+
+
+  <!-- === TAB PAPARAN === -->
+  <section class="Riwayat-Panel {% if tab_aktif == 'paparan' %}is-active{% endif %}" data-panel="paparan">
+
+    <div class="Riwayat-Section-Header">
+      <h2 class="Riwayat-Section-Title">Riwayat Laju Paparan Radiasi</h2>
+      <span class="Riwayat-Count">{{ riwayat_paparan|length }} data</span>
+    </div>
+
+    {% if riwayat_paparan %}
+    <div class="Riwayat-Table-Wrapper">
+      <table class="Riwayat-Table">
+
+        <thead>
+          <tr>
+            <th>Keterangan</th>
+            <th>Kondisi Perisai</th>
+            <th>Radioisotop</th>
+            <th>Aktivitas Sumber</th>
+            <th>Jarak Acuan</th>
+            <th>Data Perisai</th>
+            <th>Hasil Laju Paparan</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for item in riwayat_paparan %}
+          {% set satuan_laju_value = item.satuan_laju_paparan|default(item.satuan_hasil|default(""), true) %}
+
+          <tr>
+            <td>{{ item.keterangan or "-" }}</td>
+            <td>{{ item.kondisi_perisai|replace("_", " ")|title }}</td>
+            <td>{{ item.radioisotop }}</td>
+            <td>{{ item.aktivitas_input }} {{ item.satuan_aktivitas|replace("uCi", "µCi") }}</td>
+            <td>{{ item.jarak_input }} {{ item.satuan_jarak }}</td>
+            <td>{% if item.kondisi_perisai == "dengan_perisai" %} {{ item.material_perisai or "-" }}
+              <br>
+              {{ item.tebal_perisai_input or "-" }} {{ item.satuan_tebal_perisai or "" }}
+              {% if item.hvl is defined and item.hvl is not none %}
+              <br>
+              HVL: {{ item.hvl }} {{ item.satuan_hvl }}
+              {% endif %} {% else %} -
+              {% endif %}
+            </td>
+            <td>{{ item.laju_paparan|round(3) }} {{ satuan_laju_value|replace("uSv/jam", "µSv/jam") }}</td>
+            <td>
+              <a href="{{ url_for('main.gunakan_riwayat', jenis='paparan', riwayat_id=item.id) }}"
+                class="Riwayat-Action">Pakai</a>
+            </td>
+          </tr>
+
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="Riwayat-Empty">Belum ada riwayat perhitungan laju paparan radiasi.</p>
+    {% endif %}
+
+  </section>
+
+
+  <!-- === TAB DAERAH === -->
+  <section class="Riwayat-Panel {% if tab_aktif == 'daerah' %}is-active{% endif %}" data-panel="daerah">
+
+    <div class="Riwayat-Section-Header">
+      <h2 class="Riwayat-Section-Title">Riwayat Daerah Kerja Radiasi</h2>
+      <span class="Riwayat-Count">{{ riwayat_daerah|length }} data</span>
+    </div>
+
+    {% if riwayat_daerah %}
+    <div class="Riwayat-Table-Wrapper">
+      <table class="Riwayat-Table">
+
+        <thead>
+          <tr>
+            <th>Keterangan</th>
+            <th>Nilai Batas Dosis</th>
+            <th>Jam Kerja Tahunan</th>
+            <th>Laju Paparan</th>
+            <th>Jarak Acuan</th>
+            <th>Faktor Okupansi</th>
+            <th>Daerah Pengendalian</th>
+            <th>Daerah Supervisi</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for item in riwayat_daerah %}
+          {% set pembatas_dosis_value = item.pembatas_dosis if item.pembatas_dosis is defined else item.nilai_batas_dosis %}
+          {% set satuan_jarak_value = item.satuan_jarak_acuan|default("m", true) %}
+
+          <tr>
+            <td>{{ item.keterangan or "-" }}</td>
+            <td>{{ pembatas_dosis_value }} mSv/tahun</td>
+            <td>{{ item.jam_kerja }} jam/tahun</td>
+            <td>{{ item.laju_paparan }} {{ item.satuan_paparan|replace("uSv/jam", "µSv/jam") }}</td>
+            <td>{{ item.jarak_acuan }} {{ item.satuan_jarak_acuan }}</td>
+            <td>{{ item.faktor_okupansi }}</td>
+            <td>{{ "%.2f"|format(item.hasil_pengendalian) }} m</td>
+            <td>{{ "%.2f"|format(item.hasil_supervisi) }} m</td>
+            <td>
+              <a href="{{ url_for('main.gunakan_riwayat', jenis='daerah', riwayat_id=item.id) }}"
+                class="Riwayat-Action">Pakai</a>
+            </td>
+          </tr>
+
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="Riwayat-Empty">Belum ada riwayat perhitungan daerah radiasi.</p>
+    {% endif %}
+    
+  </section>
+
+</section>
+{% endblock %}

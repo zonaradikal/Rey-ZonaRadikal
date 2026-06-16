@@ -1,0 +1,165 @@
+/* =========================
+   TAMPILAN PC
+========================= */
+/* === FOOTER UTAMA === */
+.Global-Footer {
+  padding: 7px 11px;
+  background-color: var(--color-blue);
+  color: var(--color-offwhite);
+}
+
+/* === ISI FOOTER === */
+.Footer-Content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  text-align: center;
+}
+/* === TEKS FOOTER === */
+.Footer-Text {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* === LINK FOOTER === */
+.Footer-Link {
+  color: var(--color-cream);
+  font-size: 13px;
+  font-weight: 500;
+  transition: 300ms ease-in-out;
+}
+.Footer-Link:hover {
+  color: var(--color-offwhite);
+}
+.Helper-Wrapper {
+  display: contents;
+}
+
+/* === OVERLAY BANTUAN === */
+.Helper-Overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  background-color: rgba(0, 13, 13, .3);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 300ms ease, visibility 300ms ease;
+}
+.Helper-Overlay.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+.Helper-Overlay.active .Helper-Tab {
+  transform: translateY(0);
+}
+
+/* === TAB BANTUAN === */
+.Helper-Tab {
+  width: 500px;
+  max-width: 100%;
+  max-height: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  padding: 30px;
+  border-radius: 17px;
+  background-color: var(--color-offwhite);
+  box-shadow: 0 7px 21px rgba(0, 0, 0, .25);
+  transform: translateY(20px);
+  transition: transform 300ms ease;
+}
+
+/* === HEADER TAB === */
+.Helper-Tab-Header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 13px;
+}
+.Helper-Tab-Title {
+  color: var(--color-blue);
+  font-size: 17px;
+  font-weight: 800;
+  text-decoration: underline 1.7px;
+}
+
+/* === TOMBOL TUTUP === */
+.Helper-Close {
+  width: 30px;
+  height: 30px;
+  border-radius: 30px;
+  background-color: var(--color-cream);
+  color: var(--color-blue);
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1;
+  transition: 300ms ease-in-out;
+}
+.Helper-Close:hover {
+  background-color: var(--color-yellow);
+}
+
+/* === KONTEN BANTUAN === */
+.Helper-Content {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  overflow-y: auto;
+  padding-right: 7px;
+  text-align: left;
+}
+.Helper-Item {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 17px;
+  border-left: 7px solid var(--color-cream);
+  background-color: var(--color-lightblue);
+}
+.Helper-Item-Title {
+  color: var(--color-blue);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.Helper-Item-Text, .Helper-Empty {
+  color: var(--color-blue);
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+/* =========================
+   TAMPILAN MOBILE
+========================= */
+@media (max-width: 600px) {
+  .Footer-Content {
+    flex-direction: column;
+    gap: 1px;
+  }
+  .Footer-Text, .Footer-Link {
+    font-size: 13px;
+  }
+
+  .Helper-Overlay {
+    padding: 25px;
+  }
+  .Helper-Tab {
+    width: min(350, 100%);
+    max-height: 500px;
+    padding: 35px;
+    border-radius: 13px;
+  }
+  .Helper-Tab-Title {
+    font-size: 15px;
+  }
+  .Helper-Item-Title, .Helper-Item-Text,.Helper-Empty {
+    font-size: 11px;
+  }
+}

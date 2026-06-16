@@ -1,0 +1,35 @@
+<header>
+  <nav class="Nav-Bar" aria-label="Navigasi utama">
+    
+    <a href="{{ url_for('main.beranda') }}" class="Nav-Logo" aria-label="Beranda Zona Radikal">
+      <img src="{{ url_for('static', filename='images/Logo Web.png') }}" alt="Logo Zona Radikal"/>
+    </a>
+   
+    <button type="button" class="Nav-Open" aria-label="Buka menu" title="Buka menu">&#9776;</button>
+    <button type="button" class="Nav-Close" aria-label="Tutup menu" title="Tutup menu">&times;</button>
+
+    <div class="Nav-Menu">
+      <ul class="Nav-List">
+
+        {% if session.get("role") == "admin" %}
+        <li><a href="{{ url_for('admin.index') }}">Admin</a></li>
+        {% endif %}
+        
+        <li><a href="{{ url_for('main.beranda') }}">Beranda</a></li>
+        <li><a href="{{ url_for('main.aktivitas') }}">Aktivitas</a></li>
+        <li><a href="{{ url_for('main.paparan') }}">Paparan</a></li>
+        <li><a href="{{ url_for('main.daerah') }}">Daerah</a></li>
+        <li><a href="{{ url_for('main.riwayat') }}">Riwayat</a></li>
+        <li><a href="{{ url_for('main.panduan') }}">Panduan</a></li>
+        <li>
+            <form action="{{ url_for('auth.logout') }}" method="POST">
+              <button type="submit" class="Nav-Logout" aria-label="Logout" title="Logout">
+                <img src="{{ url_for('static', filename='images/Logout Icon.png') }}" alt="Ikon Logout" class="Nav-Logout-Icon">
+              </button>
+            </form>
+        </li>
+      </ul>
+    </div>
+    
+  </nav>
+</header>

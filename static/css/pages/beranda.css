@@ -1,0 +1,325 @@
+/* =========================
+   TAMPILAN PC
+========================= */
+.Page-Beranda {
+  padding: 0;
+}
+.Page-Beranda .Page-Header {
+  text-align: center;
+  margin: 0 auto;
+}
+
+/* === FITUR === */
+.Beranda-Menu {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 17px;
+}
+.Beranda-Fitur-Card {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  min-height: 100px;
+  padding: 17px;
+  border: 1px solid var(--color-lightblue);
+  border-radius: 21px;
+  background-color: var(--color-offwhite);
+  color: inherit;
+  text-decoration: none;
+  box-shadow: 0 3px 11px rgba(0, 0, 0, 0.7);
+  transition: transform 300ms ease-in-out, box-shadow 300ms ease-in-out, border-color 300ms ease-in-out;
+}
+.Beranda-Fitur-Card:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-blue);
+  box-shadow: 0 7px 21px rgba(0, 0, 0, 0.3);
+}
+.Beranda-Fitur-Card:focus-visible {
+  outline: 3px solid var(--color-lightblue);
+  outline-offset: 3px;
+}
+.Beranda-Fitur-Badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  flex: 0 0 25px;
+  border-radius: 50%;
+  background-color: var(--color-blue);
+  color: var(--color-offwhite);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.Beranda-Fitur-Content {
+  flex: 1;
+  min-width: 0;
+}
+.Beranda-Fitur-Title {
+  margin: 0;
+  color: var(--color-blue);
+  font-size: 17px;
+  font-weight: 700;
+}
+.Beranda-Fitur-Desc {
+  margin: 3px 0 0;
+  color: var(--color-blue);
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+/* === BERANDA INFO === */
+.Beranda-Info {
+  display: flex;
+  flex-direction: column;
+  margin-top: 13px;
+}
+
+/* === SECTION TITLE === */
+.Beranda-Section-Title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.Beranda-Section-Icon {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  object-fit: contain;
+}
+
+/* === BERANDA SECTION === */
+.Beranda-Section {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.Beranda-Section.is-active {
+  gap: 0;
+}
+
+.Beranda-Trigger {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  padding: 11px 17px;
+  border: 3px solid var(--color-blue);
+  border-radius: 17px;
+  background-color: var(--color-blue);
+  color: var(--color-offwhite);
+  text-align: left;
+  cursor: pointer;
+}
+.Beranda-Trigger::after {
+  content: "+";
+  margin-left: auto;
+  font-size: 21px;
+  font-weight: 700;
+}
+.Beranda-Section.is-active .Beranda-Trigger {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.Beranda-Section.is-active .Beranda-Trigger::after {
+  content: "−";
+}
+
+.Beranda-Content {
+  display: none;
+  padding: 17px;
+  border: 3px solid var(--color-blue);
+  border-top: none;
+  border-bottom-left-radius: 17px;
+  border-bottom-right-radius: 17px;
+  background-color: var(--color-offwhite);
+}
+.Beranda-Section.is-active .Beranda-Content {
+  display: block;
+}
+
+/* === ZONA RADIKAL === */
+.Beranda-Info-Text {
+  margin: 0;
+  color: var(--color-blue);
+  font-size: 13px;
+  line-height: 1.3;
+}
+.Beranda-Info-Text strong {
+  color: var(--color-yellow);
+  font-weight: 700;
+}
+
+.Beranda-Highlight {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  margin-top: 11px;
+  padding: 13px;
+  border-left: 5px solid var(--color-yellow);
+  background-color: var(--color-lightblue);
+}
+.Beranda-Highlight-Icon {
+  width: 25px;
+  height: 25px;
+  flex: 0 0 25px;
+  object-fit: contain;
+}
+.Beranda-Highlight p {
+  margin: 0;
+  color: var(--color-blue);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: center;
+}
+
+/* === DASAR PEMBUATAN === */
+.Beranda-Regulasi-List {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 17px;
+}
+.Beranda-Regulasi-Item {
+  overflow: hidden;
+}
+.Beranda-Regulasi-Icon {
+  display: block;
+  width: 30px;
+  height: 30px;
+  margin: 7px auto 0;
+  object-fit: contain;
+}
+.Beranda-Regulasi-Item h3 {
+  margin: 0;
+  padding: 11px;
+  background-color: var(--color-blue);
+  color: var(--color-offwhite);
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.3;
+}
+.Beranda-Regulasi-Item p {
+  margin: 0;
+  padding: 11px ;
+  color: var(--color-blue);
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+/* === ALUR & BATASAN === */
+.Beranda-Detail-List {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 17px;
+}
+.Beranda-Detail {
+  overflow: hidden;
+}
+
+.Beranda-Detail-Num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background-color: var(--color-yellow);
+  color: var(--color-blue);
+  font-size: 13px;
+  font-weight: 700;
+}
+.Beranda-Detail h3 {
+  margin: 0;
+  padding: 11px;
+  background-color: var(--color-blue);
+  color: var(--color-offwhite);
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.3;
+}
+.Beranda-Detail p {
+  margin: 0;
+  padding: 7px 13px;
+  color: var(--color-blue);
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+/* =========================
+   TAMPILAN MOBILE
+========================= */
+@media (max-width: 600px) {
+  .Beranda-Menu, .Beranda-Regulasi-List, .Beranda-Detail-List {
+    grid-template-columns: 1fr;
+    gap: 13px;
+  }
+  .Beranda-Info {
+    margin-top: 11px;
+  }
+
+  .Beranda-Section-Title {
+    font-size: 15px;
+  }
+  .Beranda-Section-Icon {
+    width: 25px;
+    height: 25px;
+    flex: 0 0 25px;
+  }
+
+  .Beranda-Trigger {
+    padding: 11px 13px;
+    gap: 11px;
+  }
+  .Beranda-Trigger::after {
+    font-size: 17px;
+  }
+  .Beranda-Content {
+    padding: 13px;
+  }
+
+  .Beranda-Info-Text, .Beranda-Highlight p, .Beranda-Regulasi-Item p,
+  .Beranda-Detail p, .Beranda-Fitur-Desc {
+    font-size: 11px;
+  }
+  .Beranda-Regulasi-Item h3, .Beranda-Detail h3, .Beranda-Fitur-Title {
+    font-size: 13px;
+  }
+
+  .Beranda-Highlight {
+    gap: 11px;
+    padding: 11px;
+  }
+  .Beranda-Highlight-Icon {
+    width: 21px;
+    height: 21px;
+    flex: 0 0 21px;
+  }
+
+  .Beranda-Regulasi-Icon, .Beranda-Detail-Num {
+    width: 25px;
+    height: 25px;
+  }
+  .Beranda-Detail-Num {
+    font-size: 11px;
+  }
+
+  .Beranda-Fitur-Card {
+    min-height: auto;
+    padding: 13px;
+    gap: 11px;
+  }
+  .Beranda-Fitur-Badge {
+    width: 21px;
+    height: 21px;
+    flex: 0 0 21px;
+    font-size: 11px;
+  }
+}

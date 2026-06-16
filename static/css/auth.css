@@ -1,0 +1,255 @@
+/* =========================
+   TAMPILAN PC
+========================= */
+/* === HALAMAN AUTH === */
+.auth-page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 13px;
+  overflow: hidden;
+  background: radial-gradient(
+    circle at center,
+    var(--color-lightblue) 5%,
+    var(--color-blue) 85%,
+    var(--color-cream) 100%
+  );
+}
+
+/* === LOGO WEB === */
+.auth-page::before {
+  content: "";
+  position: absolute;
+  top: 17px;
+  left: 30px;
+  width: 250px;
+  height: 70px;
+  background: url("../images/Logo Web.png") no-repeat center / contain;
+  z-index: 3;
+}
+
+/* === KOTAK AUTH & REGISTER === */
+.auth-card {
+  width: 100%;
+  max-width: 350px;
+  margin-top: 30px;
+  padding: 50px;
+  border: 5px solid var(--color-lightblue);
+  border-radius: 25px;
+  background-color: var(--color-offwhite);
+  box-shadow: 0 21px 21px rgba(0, 0, 0, 0.11);
+}
+.register-page .auth-card {
+  max-width: 600px;
+}
+
+/* === JUDUL AUTH === */
+.auth-card h1 {
+  margin-bottom: 17px;
+  color: var(--color-yellow);
+  font-size: 21px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* === FORM AUTH & REGISTER === */
+.auth-page .auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.register-page .auth-form { 
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 50px;
+  row-gap: 11px;
+}
+.register-page .form-input:first-child, .register-page .auth-button {
+  grid-column: 1 / -1;
+}
+
+/* === JARAK BARIS INPUT === */
+.auth-page .form-input {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+/* === LABEL INPUT === */
+.auth-page .form-input label {
+  color: var(--color-blue);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* === INPUT === */
+.auth-page .form-input input {
+  width: 100%;
+  padding: 7px 13px;
+  border: 1px solid var(--color-grey);
+  border-radius: 999px;
+  background-color: var(--color-offwhite);
+  color: var(--color-blue);
+  font-size: 13px;
+  line-height: 17px;
+  outline: none;
+}
+
+/* === PLACEHOLDER === */
+.auth-page .form-input input::placeholder {
+  color: var(--color-grey);
+  font-size: 11px;
+}
+
+/* === FOKUS INPUT === */
+.auth-page .form-input input:focus {
+  border-color: var(--color-blue);
+}
+
+/* === DETAIL INFO INPUT === */
+.auth-page .input-info {
+  display: block;
+  margin-top: 1px;
+  color: var(--color-grey);
+  font-size: 11px;
+  line-height: 11px;
+}
+
+/* === TOMBOL SUBMIT === */
+.auth-button {
+  max-width: 250px;
+  width:100%;
+  margin: 0 auto;
+  margin-top: 11px;
+  padding: 7px 13px;
+  border: none;
+  border-radius: 25px;
+  background-color: var(--color-blue);
+  color: var(--color-offwhite);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 300ms ease-in-out;
+}
+.auth-button:hover {
+  background-color: var(--color-cream);
+  color: var(--color-blue);
+}
+
+/* === SWITCH HALAMAN === */
+.auth-switch {
+  margin-top: 11px;
+  color: var(--color-blue);
+  font-size: 13px;
+  text-align: center;
+}
+.auth-switch a {
+  color: var(--color-yellow);
+  font-weight: 700;
+}
+.auth-switch a:hover {
+  color: var(--color-cream);
+}
+
+/* === SHOW/HIDE PASSWORD === */
+.form-input{
+  position:relative;
+}
+.toggle-password{
+  position:absolute;
+  top:28px;
+  right:13px;
+  border:none;
+  background:none;
+  color:var(--color-grey);
+  cursor:pointer;
+}
+.toggle-password:hover{
+  color:var(--color-blue);
+}
+
+/* === LOADING SUBMIT === */
+.auth-button.loading,
+.auth-button:disabled{
+  opacity:.8;
+  cursor:not-allowed;
+  pointer-events:none;
+}
+
+/* =========================
+   TAMPILAN MOBILE
+========================= */
+@media (max-width: 600px) {
+  /* === HALAMAN AUTH === */
+  .auth-page {
+    padding: 21px;
+    overflow-y: auto;
+  }
+
+  /* === LOGO WEB === */
+  .auth-page::before {
+    top: 11px;
+    left: 11px;
+    width: 180px;
+    height: 50px;
+  }
+
+  /* === KOTAK AUTH & REGISTER === */
+  .auth-card, .register-page .auth-card {
+    max-width: 70%;
+    margin-top: 50px;
+    padding: 50px;
+    border-width: 3px;
+    border-radius: 21px;
+  }
+
+  /* === JUDUL AUTH === */
+  .auth-card h1 {
+    font-size: 17px;
+    margin-bottom: 13px;
+  }
+
+  /* === REGISTER JADI 1 KOLOM === */
+  .register-page .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+
+  /* === LABEL === */
+  .auth-page .form-input label {
+    font-size: 11px;
+  }
+
+  /* === INPUT === */
+  .auth-page .form-input input {
+    font-size: 11px;
+    padding: 7px 11px;
+  }
+
+  /* === INFO INPUT === */
+  .auth-page .input-info {
+    font-size: 9px;
+    line-height: 7px;
+  }
+
+  /* === SUBMIT === */
+  .auth-button {
+    max-width: 100%;
+    margin-top: 7px;
+    font-size: 11px;
+  }
+
+  /* === SWITCH HALAMAN === */
+  .auth-switch {
+    font-size: 11px;
+    margin-top: 11px;
+  }
+
+  .toggle-password{
+    top:24px;
+    right:11px;
+  }
+}

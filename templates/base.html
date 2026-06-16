@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>{% block title %}Zona Radikal{% endblock %}</title>
+
+    <script src="{{ url_for('static', filename='js/global.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/helper.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/paparan.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/riwayat.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+    
+    <link rel="icon" href="{{ url_for('static', filename='images/Zona.ico') }}" type="image/x-icon"/>
+
+    <meta name="author" content="Reyna Assyfa" />
+    <meta name="keywords" content="Proteksi Radiasi, Daerah Kerja Radiasi" />
+    <meta name="description" content="Sistem Pendukung Keputusan untuk membantu penentuan daerah kerja radiasi"/>
+  </head>
+
+  <body>
+    {% block content %}{% endblock %}
+
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>

@@ -1,0 +1,205 @@
+{% set bantuan_halaman = "daerah" %}
+{% extends "app_base.html" %}
+{% block title %}Daerah Radiasi | Zona Radikal{% endblock %}
+
+{% block page_content %}
+{% set paparan_units = [
+  ("mSv/jam", "mSv/jam"),
+  ("uSv/jam", "µSv/jam"),
+  ("mR/jam", "mR/jam")
+] %}
+
+{% set pembatas_dosis_value = pembatas_dosis if pembatas_dosis is defined else 20 %}
+{% set jam_kerja_value = jam_kerja if jam_kerja is defined else 2000 %}
+{% set laju_paparan_value = laju_paparan if laju_paparan is defined and laju_paparan is not none else "" %}
+{% set satuan_paparan_value = satuan_paparan if satuan_paparan is defined else "mSv/jam" %}
+{% set faktor_okupansi_value = faktor_okupansi if faktor_okupansi is defined else 1 %}
+{% set jarak_acuan_value = jarak_acuan if jarak_acuan is defined and jarak_acuan is not none else "" %}
+{% set keterangan_value = keterangan if keterangan is defined else "" %}
+{% set hasil_pengendalian_value = hasil_pengendalian if hasil_pengendalian is defined else none %}
+{% set hasil_supervisi_value = hasil_supervisi if hasil_supervisi is defined else none %}
+
+<section class="Page Page-Daerah">
+
+    <section class="Page-Header">
+      <h1 class="Page-Title">Daerah Kerja Radiasi</h1>
+      <p class="Page-Desc">
+        Perhitungan daerah kerja dilakukan berdasarkan laju paparan, waktu kerja,
+        jarak acuan, faktor okupansi, dan nilai batas dosis.
+      </p>
+
+      <div class="Page-Regulasi-List">
+        <p class="Page-Regulasi-Card">
+          Perka BAPETEN No. 4 Tahun 2013 Pasal 1 ayat (21) menjelaskan Daerah
+          Pengendalian sebagai daerah kerja khusus untuk mengendalikan paparan normal
+          atau mencegah penyebaran kontaminasi.
+        </p>
+
+        <p class="Page-Regulasi-Card">
+          Pasal 1 ayat (22) menjelaskan Daerah Supervisi sebagai daerah kerja di luar
+          Daerah Pengendalian yang memerlukan peninjauan terhadap paparan kerja.
+        </p>
+
+        <p class="Page-Regulasi-Card">
+          Pasal 25 huruf (a) menegaskan bahwa Pemegang Izin wajib melakukan pembagian
+          daerah kerja untuk memastikan Nilai Batas Dosis tidak terlampaui.
+        </p>
+      </div>
+    </section>
+
+    <form method="POST" action="{{ url_for('main.daerah') }}" class="Daerah-Form">
+
+      <!-- === DATA DASAR === -->
+      <div class="Daerah-Grid-Utama">
+
+        <div class="Input-Field">
+          <label for="pembatas_dosis" class="Daerah-Label">Pembatas Dosis</label>
+          <input type="number" id="pembatas_dosis" name="pembatas_dosis"
+            class="Daerah-Input" step="any" min="1" max="100"
+            value="{{ pembatas_dosis_value }}">
+          <small class="Input-Info">Pembatas dosis pekerja radiasi.</small>
+        </div>
+
+        <div class="Input-Field">
+          <label for="satuan_dosis" class="Daerah-Label">Satuan</label>
+          <input type="text" id="satuan_dosis" class="Daerah-Input" value="mSv/tahun" readonly>
+        </div>
+
+        <div class="Input-Field">
+          <label for="jam_kerja" class="Daerah-Label">Jam Kerja Total</label>
+          <input type="number" id="jam_kerja" name="jam_kerja"
+            class="Daerah-Input" step="any" min="1" max="5000"
+            value="{{ jam_kerja_value }}">
+          <small class="Input-Info">Total jam kerja tahunan.</small>
+        </div>
+
+        <div class="Input-Field">
+          <label for="satuan_jam_kerja" class="Daerah-Label">Satuan</label>
+          <input type="text" id="satuan_jam_kerja" class="Daerah-Input" value="jam/tahun" readonly>
+        </div>
+
+      </div>
+
+      <!-- === PAPARAN === -->
+      <div class="Daerah-Grid-Paparan">
+
+        <div class="Input-Field">
+          <label for="laju_paparan" class="Daerah-Label">Laju Paparan pada Jarak Acuan</label>
+          <input type="number" id="laju_paparan" name="laju_paparan"
+            class="Daerah-Input" step="any" min="0.001" max="500"
+            value="{{ laju_paparan_value }}">
+        </div>
+
+        <div class="Input-Field">
+          <label for="satuan_paparan" class="Daerah-Label">Satuan</label>
+          <select id="satuan_paparan" name="satuan_paparan"
+            class="Daerah-Input Daerah-Select">
+            {% for value, label in paparan_units %}
+              <option value="{{ value }}"
+                {% if satuan_paparan_value == value %}selected{% endif %}>
+                {{ label }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="Input-Field">
+          <label for="jarak_acuan" class="Daerah-Label">Jarak Acuan Paparan</label>
+          <input type="number" id="jarak_acuan" name="jarak_acuan"
+            class="Daerah-Input" step="any" min="1" max="100"
+            value="{{ jarak_acuan_value }}">
+        </div>
+
+        <div class="Input-Field">
+          <label for="satuan_jarak_acuan" class="Daerah-Label">Satuan</label>
+          <input type="text" id="satuan_jarak_acuan" class="Daerah-Input" value="m" readonly>
+        </div>
+
+      </div>
+
+      <!-- === OKUPANSI & KETERANGAN === -->
+      <div class="Daerah-Grid-Bawah">
+
+        <div class="Input-Field">
+          <label for="faktor_okupansi" class="Daerah-Label">Faktor Okupansi</label>
+          <input type="number" id="faktor_okupansi" name="faktor_okupansi"
+            class="Daerah-Input" step="0.01" min="0.01" max="1"
+            value="{{ faktor_okupansi_value }}">
+        </div>
+
+        <div class="Input-Field">
+          <label for="keterangan" class="Daerah-Label">Keterangan</label>
+          <input type="text" id="keterangan" name="keterangan"
+            class="Daerah-Input" value="{{ keterangan_value }}"
+            maxlength="255">
+        </div>
+        
+      </div>
+
+      <!-- === HITUNG RESET === -->
+      <div class="Cal-Action">
+        <button type="submit" class="Button-Primary">Hitung</button>
+        <a href="{{ url_for('main.daerah') }}" class="Button-Reset">Reset</a>
+      </div>
+
+    </form>
+
+    <section class="Cal-Result">
+      <h2 class="Cal-Result-Title">Hasil Perhitungan Daerah Kerja</h2>
+      <div class="Cal-Result-Grid">
+
+        <div class="Cal-Result-Card">
+          <span class="Cal-Result-Label">Jarak untuk Daerah Pengendalian</span>
+          <span class="Cal-Result-Value">
+            {% if hasil_pengendalian_value is not none %}
+              {{ hasil_pengendalian_value|round(2) }} m
+            {% else %} - m
+            {% endif %}
+          </span>
+        </div>
+
+        <div class="Cal-Result-Card">
+          <span class="Cal-Result-Label">Jarak untuk Daerah Supervisi</span>
+          <span class="Cal-Result-Value">
+            {% if hasil_supervisi_value is not none %}
+              {{ hasil_supervisi_value|round(2) }} m
+            {% else %} - m
+            {% endif %}
+          </span>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="Page-Header">
+      <h2 class="Page-Title-2">Dasar Kriteria dan Tindakan Daerah Radiasi</h2>
+
+      <div class="Page-Regulasi-List-2">
+        <p class="Page-Regulasi-Card">
+          Pasal 27 ayat (1) menjelaskan bahwa Daerah Pengendalian dapat ditetapkan
+          jika potensi penerimaan paparan radiasi melebihi 3/10 Nilai Batas Dosis
+          Pekerja Radiasi dan/atau terdapat potensi kontaminasi.
+        </p>
+
+        <p class="Page-Regulasi-Card">
+          Pasal 29 ayat (1) menjelaskan bahwa Daerah Supervisi dapat ditetapkan jika
+          potensi penerimaan paparan radiasi individu lebih dari NBD anggota masyarakat
+          dan kurang dari 3/10 NBD Pekerja Radiasi, serta bebas kontaminasi.
+        </p>
+
+        <p class="Page-Regulasi-Card">
+          Pasal 28 memuat tindakan pada Daerah Pengendalian, seperti pembatasan daerah,
+          pemasangan tanda peringatan, pengaturan akses, serta penyediaan peralatan
+          pemantauan dan proteksi radiasi.
+        </p>
+
+        <p class="Page-Regulasi-Card">
+          Pasal 29 ayat (2) mewajibkan Pemegang Izin menandai dan membatasi Daerah
+          Supervisi dengan tanda yang jelas, termasuk pada titik akses masuk.
+        </p>
+      </div>
+      
+    </section>
+
+</section>
+{% endblock %}

@@ -1,0 +1,145 @@
+/* =========================
+   TAMPILAN PC
+========================= */
+/* === SIDEBAR UTAMA === */
+.Global-Aside {
+  position: absolute;
+  top: 30px;
+  right: 21px;
+  bottom: 30px;
+  width: 250px;
+  max-height: 650px;
+  display: flex;
+  flex-direction: column;
+  padding: 17px;
+  border-radius: 17px;
+  background-color: var(--color-offwhite);
+  box-shadow: 0 7px 7px var(--color-grey);
+  overflow: hidden;
+}
+
+/* === HEADER SIDEBAR === */
+.Aside-Header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 13px;
+  margin-bottom: 21px;
+}
+.Aside-Header h3 {
+  color: var(--color-blue);
+  font-size: 17px;
+  font-weight: 800;
+  text-decoration: underline 1.3px;
+  text-underline-offset: 3px;
+}
+.Aside-Detail {
+  flex-shrink: 0;
+  color: var(--color-yellow);
+  font-size: 13px;
+  font-weight: 700;
+  transition: 300ms ease-in-out;
+  text-decoration: underline 1.3px;
+  text-underline-offset: 3px;
+}
+.Aside-Detail:hover {
+  color: var(--color-cream);
+}
+
+/* === LIST RIWAYAT === */
+.Aside-Riwayat-List {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* === LINK RIWAYAT === */
+.Aside-Riwayat-Link {
+  display: block;
+}
+
+/* === CARD RIWAYAT === */
+.Aside-Riwayat-Card {
+  padding: 11px;
+  border: 1px solid var(--color-blue);
+  border-radius: 13px;
+  background-color: var(--color-offwhite);
+  transition: 300ms ease-in-out;
+}
+.Aside-Riwayat-Card:hover {
+  border-color: var(--color-yellow);
+  transform: translateY(-3px);
+  box-shadow: 0 3px 3px rgba(0,0,0,.3);
+}
+
+/* === TEKS RIWAYAT === */
+.Aside-Judul,.Aside-Hasil,.Aside-Isotop {
+  margin-bottom: 1.5px;
+  color: var(--color-blue);
+  font-size: 13px;
+}
+.Aside-Judul {
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--color-cream);
+  font-weight: 700;
+}
+.Aside-Hasil, .Aside-Isotop {
+  font-weight: 600;
+}
+.Aside-Waktu {
+  display: block;
+  color: var(--color-blue);
+  font-size: 11px;
+  font-weight: 600;
+  text-align: right;
+}
+.Aside-Kosong {
+  color: var(--color-grey);
+  font-size: 13px;
+}
+
+/* =========================
+   TAMPILAN MOBILE
+========================= */
+@media (max-width: 600px) {
+  .Global-Aside {
+    width: 80%;
+    margin: 0 auto;
+    position: static;
+    height: auto;
+    padding: 17px 30px;
+    border-radius: 13px;
+    overflow: visible;
+
+  }
+
+  .Aside-Header {
+    gap: 11px;
+    margin-bottom: 13px;
+  }
+  .Aside-Header h3 {
+    font-size: 13px;
+  }
+  .Aside-Detail {
+    font-size: 11px;
+  }
+
+  .Aside-Riwayat-List {
+    overflow-y: visible;
+  }
+  .Aside-Riwayat-Card {
+    padding: 11px;
+    border-radius: 11px;
+  }
+
+  .Aside-Judul {
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .Aside-Hasil, .Aside-Isotop, .Aside-Waktu, .Aside-Kosong {
+    font-size: 11px;
+    font-weight: 600;
+  }
+}

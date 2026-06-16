@@ -1,0 +1,200 @@
+{% extends "app_base.html" %}
+{% block title %}Beranda | Zona Radikal{% endblock %}
+
+{% block page_content %}
+<section class="page Page-Beranda">
+
+  <!-- === HEADER BERANDA === -->
+  <section class="Page-Header">
+    <h1 class="Page-Title">Selamat Datang, {{ full_name }}!</h1>
+  </section>
+
+  <!-- === ZONA RADIKAL === -->
+  <section class="Beranda-Info Beranda-Section">
+
+    <button type="button" class="Beranda-Section-Title Beranda-Trigger">
+      <img src="{{ url_for('static', filename='images/Section 1.png') }}" alt="" class="Beranda-Section-Icon">
+      <span>Apa Itu Zona Radikal?</span>
+    </button>
+
+    <div class="Beranda-Content">
+      <p class="Beranda-Info-Text">
+        Zona Radikal adalah singkatan dari <strong>Zona</strong> yang berarti daerah,
+        <strong>Radi</strong> yang merujuk pada radiasi, dan <strong>Kal</strong> yang
+        berarti kalkulasi. Secara umum, Zona Radikal merupakan Sistem Kalkulasi Daerah
+        Radiasi yang digunakan untuk membantu pengguna dalam menentukan klasifikasi
+        daerah kerja radiasi.
+      </p>
+
+      <div class="Beranda-Highlight">
+        <img src="{{ url_for('static', filename='images/Gear.png') }}" alt="" class="Beranda-Highlight-Icon">
+        <p>
+          Sistem ini dirancang sebagai alat bantu perhitungan dan rekomendasi yang
+          membantu proses secara lebih terstruktur, konsisten, dan mengacu pada
+          regulasi keselamatan radiasi di Indonesia.
+        </p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- === DASAR PEMBUATAN === -->
+  <section class="Beranda-Info Beranda-Section">
+    <button type="button" class="Beranda-Section-Title Beranda-Trigger">
+      <img src="{{ url_for('static', filename='images/Section 2.png') }}" alt="" class="Beranda-Section-Icon">
+      <span>Mengapa Sistem Ini Dibuat?</span>
+    </button>
+    <div class="Beranda-Content">
+
+      <div class="Beranda-Regulasi-List">
+        <article class="Beranda-Regulasi-Item">
+          <img src="{{ url_for('static', filename='images/Reg1.png') }}" alt="" class="Beranda-Regulasi-Icon">
+          <h3>UU No. 10 Tahun 1997</h3>
+          <p>
+            Mengatur bahwa pemanfaatan tenaga nuklir harus memperhatikan keselamatan,
+            keamanan, kesehatan pekerja dan masyarakat, serta perlindungan lingkungan.
+            (Pasal 16 ayat 1)
+          </p>
+        </article>
+
+        <article class="Beranda-Regulasi-Item">
+          <img src="{{ url_for('static', filename='images/Reg2.png') }}" alt="" class="Beranda-Regulasi-Icon">
+          <h3>PP RI No. 45 Tahun 2023</h3>
+          <p>
+            Menjelaskan keselamatan dan proteksi radiasi sebagai dasar perlindungan
+            pekerja, masyarakat, pasien, dan lingkungan dari bahaya radiasi pengion.
+            (Pasal 4 ayat 1)
+          </p>
+        </article>
+
+        <article class="Beranda-Regulasi-Item">
+          <img src="{{ url_for('static', filename='images/Reg3.png') }}" alt="" class="Beranda-Regulasi-Icon">
+          <h3>Perka BAPETEN No. 4 Tahun 2013</h3>
+          <p>
+            Menjadi dasar penerapan proteksi radiasi, termasuk peran PPR, pengawasan,
+            kendali akses, dan pembagian daerah kerja radiasi. (Pasal 7)
+          </p>
+        </article>
+      </div>
+
+    </div>
+  </section>
+
+    <!-- === FITUR PERHITUNGAN === -->
+  <section class="Beranda-Info">
+    <div class="Beranda-Menu">
+      
+      <a href="{{ url_for('main.aktivitas') }}" class="Beranda-Fitur-Card">
+        <div class="Beranda-Fitur-Badge">A</div>
+        <div class="Beranda-Fitur-Content">
+          <h3 class="Beranda-Fitur-Title">Aktivitas Sumber</h3>
+          <p class="Beranda-Fitur-Desc">
+            Menghitung aktivitas sumber radiasi saat ini berdasarkan aktivitas awal,
+            waktu paruh radioisotop, dan selang waktu dari tanggal acuan.
+          </p>
+        </div>
+      </a>
+      <a href="{{ url_for('main.paparan') }}" class="Beranda-Fitur-Card">
+        <div class="Beranda-Fitur-Badge">P</div>
+        <div class="Beranda-Fitur-Content">
+          <h3 class="Beranda-Fitur-Title">Laju Paparan</h3>
+          <p class="Beranda-Fitur-Desc">
+            Menghitung laju paparan radiasi berdasarkan aktivitas sumber, jarak,
+            serta perisai radiasi jika digunakan.
+          </p>
+        </div>
+      </a>
+      <a href="{{ url_for('main.daerah') }}" class="Beranda-Fitur-Card">
+        <div class="Beranda-Fitur-Badge">D</div>
+        <div class="Beranda-Fitur-Content">
+          <h3 class="Beranda-Fitur-Title">Daerah Kerja</h3>
+          <p class="Beranda-Fitur-Desc">
+            Membantu menentukan Daerah Pengendalian dan Daerah Supervisi berdasarkan
+            laju paparan, waktu kerja, dan nilai batas dosis.
+          </p>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- === CARA MENGGUNAKAN SISTEM === -->
+  <section class="Beranda-Info Beranda-Section">
+    <button type="button" class="Beranda-Section-Title Beranda-Trigger">
+      <img src="{{ url_for('static', filename='images/Section 4.png') }}" alt="" class="Beranda-Section-Icon">
+      <span>Alur Penggunaan Sistem</span>
+    </button>
+    <div class="Beranda-Content">
+
+      <div class="Beranda-Detail-List">
+        <article class="Beranda-Detail">
+          <div class="Beranda-Detail-Num">1</div>
+          <h3>Pilih Fitur Perhitungan</h3>
+          <p>Pilih menu Aktivitas, Paparan, atau Daerah Radiasi sesuai kebutuhan perhitungan.</p>
+        </article>
+        <article class="Beranda-Detail">
+          <div class="Beranda-Detail-Num">2</div>
+          <h3>Masukkan Data</h3>
+          <p>Isi seluruh parameter yang diperlukan berdasarkan data sumber radiasi dan kondisi kerja.</p>
+        </article>
+        <article class="Beranda-Detail">
+          <div class="Beranda-Detail-Num">3</div>
+          <h3>Lakukan Perhitungan</h3>
+          <p>Tekan tombol Hitung untuk memperoleh hasil sesuai metode dan parameter yang digunakan.</p>
+        </article>
+        <article class="Beranda-Detail">
+          <div class="Beranda-Detail-Num">4</div>
+          <h3>Tinjau Hasil</h3>
+          <p>Periksa hasil perhitungan dan gunakan sebagai referensi dalam penentuan daerah kerja radiasi.</p>
+        </article>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- === BATASAN SISTEM === -->
+  <section class="Beranda-Info Beranda-Section">
+    <button type="button" class="Beranda-Section-Title Beranda-Trigger">
+      <img src="{{ url_for('static', filename='images/Section 5.png') }}" alt="" class="Beranda-Section-Icon">
+      <span>Batasan Sistem</span>
+    </button>
+    <div class="Beranda-Content">
+
+      <div class="Beranda-Detail-List">
+        <div class="Beranda-Detail">
+          <h3>Data Masukan</h3>
+          <p>
+            Hasil perhitungan bergantung pada data yang dimasukkan pengguna.
+            Kesalahan input dapat menghasilkan nilai yang tidak sesuai.
+          </p>
+        </div>
+        <div class="Beranda-Detail">
+          <h3>Ruang Lingkup Perhitungan</h3>
+          <p>
+            Sistem hanya mencakup parameter dan metode perhitungan yang telah
+            diterapkan pada fitur Aktivitas, Paparan, dan Daerah Radiasi.
+          </p>
+        </div>
+        <div class="Beranda-Detail">
+          <h3>Regulasi</h3>
+          <p>
+            Perhitungan mengacu pada regulasi dan referensi yang digunakan saat
+            pengembangan sistem sehingga perlu disesuaikan apabila terdapat
+            perubahan ketentuan di masa mendatang.
+          </p>
+        </div>
+        <div class="Beranda-Detail">
+          <h3>Penggunaan Hasil</h3>
+          <p>
+            Hasil perhitungan sebaiknya digunakan sebagai referensi awal dan
+            tetap memerlukan verifikasi sesuai prosedur keselamatan radiasi
+            yang berlaku.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</section>
+{% endblock %}

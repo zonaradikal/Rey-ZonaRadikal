@@ -1,0 +1,320 @@
+{% set bantuan_halaman = "paparan" %}
+{% extends "app_base.html" %}
+{% block title %}Paparan | Zona Radikal{% endblock %}
+
+{% block page_content %}
+{% set form_data = form_data|default({}) %}
+{% set radioisotop_options = ["Co-60", "Cs-137", "Ir-192"] %}
+{% set aktivitas_units = [
+  ("Bq", "Bq"),
+  ("kBq", "kBq"),
+  ("MBq", "MBq"),
+  ("GBq", "GBq"),
+  ("TBq", "TBq"),
+  ("Ci", "Ci"),
+  ("mCi", "mCi"),
+  ("uCi", "µCi")
+] %}
+{% set jarak_units = [
+  ("m", "m"),
+  ("cm", "cm")
+] %}
+{% set paparan_units = [
+  ("mSv/jam", "mSv/jam"),
+  ("uSv/jam", "µSv/jam"),
+  ("mR/jam", "mR/jam")
+] %}
+{% set material_options = ["Timbal", "Baja", "Beton"] %}
+{% set tebal_units = [
+  ("mm", "mm"),
+  ("cm", "cm")
+] %}
+
+<section class="Page Page-Paparan">
+
+  <section class="Page-Header">
+    <h1 class="Page-Title">Laju Paparan Radiasi</h1>
+    <p class="Page-Desc">
+      Laju paparan radiasi dihitung berdasarkan aktivitas sumber, radioisotop,
+      jarak, serta kondisi tanpa perisai atau dengan perisai.
+    </p>
+
+    <div class="Page-Regulasi-List">
+      <p class="Page-Regulasi-Card">
+        Perka BAPETEN No. 4 Tahun 2013 Pasal 1 ayat (11) menjelaskan bahwa paparan
+        radiasi adalah penyinaran radiasi yang diterima manusia atau materi, baik dari
+        radiasi interna maupun eksterna.
+      </p>
+
+      <p class="Page-Regulasi-Card">
+        Pasal 1 ayat (17) menjelaskan bahwa dosis radiasi merupakan jumlah radiasi
+        dalam medan radiasi atau energi radiasi yang diserap atau diterima oleh materi.
+      </p>
+
+      <p class="Page-Regulasi-Card">
+        Pasal 25 huruf (b) menegaskan bahwa Pemegang Izin wajib melakukan pemantauan
+        paparan radiasi dan/atau kontaminasi radioaktif di daerah kerja.
+      </p>
+    </div>
+  </section>
+
+    <form method="POST" action="{{ url_for('main.paparan') }}" class="Paparan-Form">
+
+      <div class="Paparan-Grid-Kondisi">
+
+        <!-- === KONDISI PAPARAN === -->
+        <div class="Input-Field">
+          <label class="Paparan-Label">Kondisi Paparan</label>
+
+          <div class="Paparan-Option-Group">
+            <label class="Paparan-Option">
+              <input type="radio" name="kondisi_perisai" value="tanpa_perisai"
+                {% if form_data.get("kondisi_perisai", "tanpa_perisai") == "tanpa_perisai" %}checked{% endif %}
+                required>
+              <span>Tanpa Perisai</span>
+            </label>
+
+            <label class="Paparan-Option">
+              <input type="radio" name="kondisi_perisai" value="dengan_perisai"
+                {% if form_data.get("kondisi_perisai") == "dengan_perisai" %}checked{% endif %}>
+              <span>Dengan Perisai</span>
+            </label>
+          </div>
+
+          <small class="Input-Info">Pilih kondisi sesuai perhitungan yang dibutuhkan.</small>
+        </div>
+
+        <!-- === RADIOISOTOP === -->
+        <div class="Input-Field">
+          <label for="radioisotop" class="Paparan-Label">Radioisotop</label>
+
+          <select name="radioisotop" id="radioisotop" class="Paparan-Input Paparan-Select" required>
+            {% for radioisotop in radioisotop_options %}
+            <option
+              value="{{ radioisotop }}" {% if form_data.get("radioisotop") == radioisotop %}selected{% endif %}>
+              {{ radioisotop }}
+            </option>
+            {% endfor %}
+          </select>
+
+          <small class="Input-Info">Pilih radioisotop sumber.</small>
+        </div>
+
+        <!-- === AKTIVITAS SUMBER === -->
+        <div class="Input-Field">
+          <label for="aktivitas" class="Paparan-Label">Aktivitas</label>
+
+          <input type="number" min="0.001" max="500" step="any" name="aktivitas" id="aktivitas"
+            class="Paparan-Input" value="{{ form_data.get('aktivitas', '') }}" required>
+
+          <small id="aktivitasInfo" class="Input-Info">Masukkan aktivitas sumber yang akan digunakan.</small>
+        </div>
+
+        <!-- === SATUAN AKTIVITAS === -->
+        <div class="Input-Field">
+          <label for="satuan_aktivitas" class="Paparan-Label">Satuan</label>
+
+          <select name="satuan_aktivitas" id="satuan_aktivitas"
+            class="Paparan-Input Paparan-Select" required>
+            {% for value, label in aktivitas_units %}
+              <option value="{{ value }}"
+                {% if form_data.get("satuan_aktivitas", "MBq") == value %}selected{% endif %}>
+                {{ label }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+      </div>
+
+      <!-- === BARIS DATA PAPARAN === -->
+      <div class="Paparan-Grid-Data">
+
+        <!-- === JARAK SUMBER === -->
+        <div class="Input-Field">
+          <label for="jarak" class="Paparan-Label">Jarak dari Sumber</label>
+
+          <input type="number" min="1" max="100" step="any" name="jarak" id="jarak"
+            class="Paparan-Input" value="{{ form_data.get('jarak', '') }}" required>
+
+          <small id="jarakInfo" class="Input-Info">
+            Gunakan jarak dari sumber radiasi ke titik tinjau.
+          </small>
+        </div>
+
+        <!-- === SATUAN JARAK === -->
+        <div class="Input-Field">
+          <label for="satuan_jarak" class="Paparan-Label">Satuan</label>
+
+          <select name="satuan_jarak" id="satuan_jarak"
+            class="Paparan-Input Paparan-Select" required>
+            {% for value, label in jarak_units %}
+              <option value="{{ value }}"
+                {% if form_data.get("satuan_jarak", "m") == value %}selected{% endif %}>
+                {{ label }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- === KONSTANTA GAMMA === -->
+        <div class="Input-Field">
+          <label for="konstanta_gamma" class="Paparan-Label">Konstanta Gamma</label>
+
+          <input type="text" name="konstanta_gamma" id="konstanta_gamma"
+            class="Paparan-Input" value="{{ form_data.get('konstanta_gamma', '') }}"
+            readonly>
+
+          <small class="Input-Info">
+            Nilai akan tampil otomatis berdasarkan radioisotop.
+          </small>
+        </div>
+
+        <!-- === SATUAN HASIL PAPARAN === -->
+        <div class="Paparan-Grid-Gamma">
+
+          <div class="Input-Field">
+            <label for="satuan_hasil" class="Paparan-Label">Satuan Paparan</label>
+
+            <select name="satuan_hasil" id="satuan_hasil"
+              class="Paparan-Input Paparan-Select" required>
+              {% for value, label in paparan_units %}
+                <option value="{{ value }}"
+                  {% if form_data.get("satuan_hasil", "mSv/jam") == value %}selected{% endif %}>
+                  {{ label }}
+                </option>
+              {% endfor %}
+            </select>
+
+            <small class="Input-Info">
+              Pilih satuan hasil yang akan ditampilkan.
+            </small>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- === DATA PERISAI === -->
+      <section class="Paparan-Perisai" id="section-perisai"
+        {% if form_data.get("kondisi_perisai") != "dengan_perisai" %}style="display:none;"{% endif %}>
+        <h2 class="Paparan-Section-Title">Data Perisai</h2>
+
+        <div class="Paparan-Perisai-Grid">
+
+          <div class="Input-Field">
+            <label for="material_perisai" class="Paparan-Label">Material Perisai</label>
+
+            <select name="material_perisai" id="material_perisai"
+              class="Paparan-Input Paparan-Select">
+              <option value="">Pilih Material</option>
+              {% for material in material_options %}
+                <option value="{{ material }}"
+                  {% if form_data.get("material_perisai") == material %}selected{% endif %}>
+                  {{ material }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="Input-Field">
+            <label for="hvl_info" class="Paparan-Label">Nilai HVL</label>
+
+            <input type="text" name="hvl_info" id="hvl_info"
+              class="Paparan-Input" value="{{ form_data.get('hvl_info', '') }}"
+              readonly>
+              <small class="Input-Info" id="tebalPerisaiInfo">Masukkan tebal perisai yang digunakan.</small>
+          </div>
+
+          <div class="Input-Field">
+            <label for="tebal_perisai" class="Paparan-Label">Tebal Perisai</label>
+
+            <input type="number" min="0.01" max="100" step="any" name="tebal_perisai"
+              id="tebal_perisai" class="Paparan-Input"
+              value="{{ form_data.get('tebal_perisai', '') }}">
+          </div>
+
+          <div class="Input-Field">
+            <label for="satuan_tebal_perisai" class="Paparan-Label">Satuan</label>
+
+            <select name="satuan_tebal_perisai" id="satuan_tebal_perisai"
+              class="Paparan-Input Paparan-Select">
+              {% for value, label in tebal_units %}
+                <option value="{{ value }}"
+                  {% if form_data.get("satuan_tebal_perisai", "mm") == value %}selected{% endif %}>
+                  {{ label }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- === KETERANGAN === -->
+      <div class="Input-Field">
+        <label for="keterangan" class="Paparan-Label">Keterangan</label>
+
+        <input type="text" name="keterangan" id="keterangan"
+          class="Paparan-Input" value="{{ form_data.get('keterangan', '') }}"
+          maxlength="255">
+
+        <small class="Input-Info">
+          Opsional, digunakan untuk membedakan riwayat perhitungan.
+        </small>
+      </div>
+
+      <!-- === HITUNG RESET === -->
+      <div class="Cal-Action">
+        <button type="submit" class="Button-Primary">Hitung</button>
+        <a href="{{ url_for('main.paparan') }}" class="Button-Reset">Reset</a>
+      </div>
+
+    </form>
+
+
+    {% if hasil %}
+    <section class="Cal-Result">
+      <h2 class="Cal-Result-Title">Hasil Perhitungan Paparan</h2>
+      <div class="Cal-Result-Grid">
+
+        <div class="Cal-Result-Card">
+          <span class="Cal-Result-Label">Radioisotop</span>
+          <span class="Cal-Result-Value">{{ hasil.radioisotop }}</span>
+        </div>
+
+        <div class="Cal-Result-Card">
+          <span class="Cal-Result-Label">Laju Paparan</span>
+          <span class="Cal-Result-Value">{{ hasil.laju_paparan }}</span>
+        </div>
+
+        <div class="Cal-Result-Card">
+          <span class="Cal-Result-Label">Kondisi Paparan</span>
+          <span class="Cal-Result-Value">{{ hasil.kondisi }}</span>
+        </div>
+
+        <div class="Cal-Result-Card">
+          <span class="Cal-Result-Label">Jarak dari Sumber</span>
+          <span class="Cal-Result-Value">
+            {{ form_data.get("jarak") }}
+            {{ form_data.get("satuan_jarak") }}
+          </span>
+        </div>
+
+        <div class="Cal-Result-Card">
+          <span class="Cal-Result-Label">Konstanta Gamma</span>
+          <span class="Cal-Result-Value">{{ hasil.konstanta_gamma }}</span>
+        </div>
+
+        <div class="Cal-Result-Card">
+          <span class="Cal-Result-Label">Tanggal Perhitungan</span>
+          <span class="Cal-Result-Value">{{ hasil.tanggal_hitung }}</span>
+        </div>
+
+      </div>
+    
+    </section>
+    {% endif %}
+    
+</section>
+{% endblock %}

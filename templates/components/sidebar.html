@@ -1,0 +1,40 @@
+<aside class="Global-Aside" aria-label="Ringkasan riwayat perhitungan">
+  <div class="Aside-Header">
+    <h3>Riwayat Terbaru</h3>
+    <a href="{{ url_for('main.riwayat') }}" class="Aside-Detail">Detail</a>
+  </div>
+
+  {% if sidebar_riwayat is defined and sidebar_riwayat %}
+    <div class="Aside-Riwayat-List">
+      {% for item in sidebar_riwayat %}
+        <a href="{{ url_for('main.riwayat') }}?tab={{ item.jenis_perhitungan }}" class="Aside-Riwayat-Link">
+          <article class="Aside-Riwayat-Card">
+            <p class="Aside-Judul">{{ item.judul_hasil or item.jenis_perhitungan|capitalize }}</p>
+
+            {% if item.jenis_perhitungan == "aktivitas" %}
+              <p class="Aside-Hasil">{{ item.hasil_data.get("hasil_aktivitas", 0)|round(3) }}
+                {{ item.hasil_data.get("satuan_hasil", item.hasil_data.get("satuan", "")) }}</p>
+              <p class="Aside-Isotop">{{ item.input_data.get("radioisotop", "-") }}</p>
+
+            {% elif item.jenis_perhitungan == "paparan" %}
+              <p class="Aside-Hasil">{{ item.hasil_data.get("laju_paparan", 0)|round(3) }}
+                {{ item.hasil_data.get("satuan_hasil", "") }}</p>
+              <p class="Aside-Isotop">{{ item.input_data.get("radioisotop", "-") }}</p>
+
+            {% elif item.jenis_perhitungan == "daerah" %}
+              <p class="Aside-Hasil">P = {{ item.hasil_data.get("hasil_pengendalian", 0)|round(2) }} m</p>
+              <p class="Aside-Isotop">S = {{ item.hasil_data.get("hasil_supervisi", 0)|round(2) }} m</p>
+            {% endif %}
+
+            <time class="Aside-Waktu" datetime="{{ item.created_at.isoformat() }}">
+              {{ item.created_at.strftime('%d-%m-%Y %H:%M') }}
+            </time>
+          </article>
+        </a>
+      {% endfor %}
+    
+    </div>
+  {% else %}
+    <p class="Aside-Kosong">Belum Ada Riwayat Perhitungan.</p>
+    {% endif %}
+</aside>

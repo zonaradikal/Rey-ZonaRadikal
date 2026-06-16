@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Registrasi | Zona Radikal{% endblock %}
+
+{% block content %}
+<div class="auth-page register-page">
+  
+  <div class="auth-card">
+    <h1>Halo, Pengguna Baru!</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="Flash-Message {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('auth.register') }}" method="POST" class="auth-form">
+      <div class="form-input">
+        <label for="full_name">Nama Lengkap</label>
+        <input
+          type="text"
+          id="full_name"
+          name="full_name"
+          placeholder="Masukkan Nama Lengkap"
+          required
+          data-required="Nama lengkap wajib diisi."
+          data-info="Masukkan nama lengkap sesuai identitas."
+        />
+        <small class="input-info"></small>
+      </div>
+
+      <div class="form-input">
+        <label for="username">Username</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          placeholder="Masukkan Username"
+          required
+          data-required="Username wajib diisi."
+          data-info="Username minimal 4 karakter, tanpa spasi, dan hanya boleh berisi huruf, angka, atau underscore (_)."
+        />
+        <small class="input-info"></small>
+      </div>
+
+      <div class="form-input">
+        <label for="no_sertifikat_ppr">Nomor Sertifikat PPR <span>(Opsional)</span></label>
+        <input
+          type="text"
+          id="no_sertifikat_ppr"
+          name="no_sertifikat_ppr"
+          placeholder="Contoh: PPR-123456"
+          data-info="Isi jika Anda memiliki sertifikat Petugas Proteksi Radiasi (PPR)."
+        />
+        <small class="input-info"></small>
+      </div>
+
+      <div class="form-input">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Masukkan Password"
+          required
+          data-required="Password wajib diisi."
+          data-info="Password minimal 8 karakter, tanpa spasi, wajib berisi huruf dan angka, serta tidak memakai karakter khusus."
+        />
+        <button type="button" class="toggle-password" aria-label="Tampilkan password"> <i class="fa-solid fa-eye"></i> </button>
+        <small class="input-info"></small>
+      </div>
+
+      <div class="form-input">
+        <label for="confirm_password">Konfirmasi Password</label>
+        <input
+          type="password"
+          id="confirm_password"
+          name="confirm_password"
+          placeholder="Masukkan Ulang Password"
+          required
+          data-required="Konfirmasi password wajib diisi."
+          data-info="Masukkan kembali password yang sama dengan password yang didaftarkan."
+        />
+        <button type="button" class="toggle-password" aria-label="Tampilkan password"> <i class="fa-solid fa-eye"></i> </button>
+        <small class="input-info"></small>
+      </div>
+
+      <button type="submit" class="auth-button">Daftar</button>
+    </form>
+
+    <p class="auth-switch"> Sudah punya akun? <a href="{{ url_for('auth.login') }}">Masuk!</a> </p>
+  </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %} <script src="{{ url_for('static', filename='js/auth.js') }}" defer></script> {% endblock %}

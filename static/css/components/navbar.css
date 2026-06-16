@@ -1,0 +1,185 @@
+/* =========================
+   TAMPILAN PC
+========================= */
+/* === NAVBAR === */
+.Nav-Bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 7px 11px;
+  background-color: var(--color-blue);
+}
+
+/* === LOGO === */
+.Nav-Logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.Nav-Logo img {
+  width: clamp(200px, 20vw, 225px);
+  height: auto;
+}
+
+/* === MENU === */
+.Nav-Menu {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  margin-right: 11px;
+}
+
+/* === LIST MENU === */
+.Nav-List {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  list-style: none;
+}
+.Nav-List a {
+  display: block;
+  padding: 11px;
+  border-radius: 13px;
+  color: var(--color-offwhite);
+  font-size: 17px;
+  font-weight: 600;
+  transition: 300ms ease-in-out;
+}
+.Nav-List a:not(.Nav-Logout):hover {
+  background-color: var(--color-offwhite);
+  color: var(--color-yellow);
+}
+
+/* === LOGOUT === */
+.Nav-Logout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px;
+  border-radius: 7px;
+  line-height: 1;
+}
+.Nav-Logout-Icon {
+  display: block;
+  width: 21px;
+  height: 21px;
+  object-fit: contain;
+  transition: 300ms ease-in-out;
+}
+.Nav-Logout:hover {
+  background-color: var(--color-yellow);
+}
+.Nav-Logout:hover .Nav-Logout-Icon {
+  transform: scale(1.05);
+}
+
+/* === OPEN & CLOSE MENU === */
+.Nav-Open, .Nav-Close {
+  display: none;
+  padding: 7px;
+  color: var(--color-offwhite);
+  font-size: 21px;
+  line-height: 1;
+}
+
+/* =========================
+   TAMPILAN MOBILE
+========================= */
+@media (max-width: 600px){
+  .Nav-Bar{
+    position: relative;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 7px 11px;
+  }
+  .Nav-Logo img{
+    width: 170px;
+  }
+
+  .Nav-Menu{
+    order: 4;
+    width: 100%;
+    margin: 0;
+  }
+  .Nav-List{
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    width: 170px;
+    margin: 7px auto 0;
+    border: 1px solid var(--color-offwhite);
+    border-radius: 11px;
+    background-color: var(--color-blue);
+    overflow: hidden;
+  }
+
+  .Nav-List.active{
+    display: flex;
+  }
+  .Nav-List li{
+    width: 100%;
+  }
+  .Nav-List a{
+    display: block;
+    width: 100%;
+    padding: 7px 11px;
+    border-radius: 0;
+    font-size: 13px;
+    text-align: left;
+  }
+
+  .Nav-Logout{
+    width: 100%;
+    padding: 7px 11px;
+    border-radius: 0;
+    justify-content: center;
+  }
+  .Nav-Logout-Icon{
+    width: 21px;
+    height: 21px;
+  }
+
+  .Nav-Open{
+    display: block;
+    margin-left: auto;
+    padding: 7px;
+    border: 1px solid var(--color-offwhite);
+    border-radius: 7px;
+    background-color: transparent;
+  }
+  .Nav-Close{
+    position: absolute;
+    top: 13px;
+    right: 11px;
+    z-index: 11;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    border: 1px solid var(--color-offwhite);
+    border-radius: 50%;
+    background-color: var(--color-blue);
+    font-size: 17px;
+  }
+
+  .Nav-Bar.active{
+    justify-content: center;
+  }
+  .Nav-Bar.active .Nav-Logo{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 21px;
+  }
+  .Nav-Bar.active .Nav-Open{
+    display: none;
+  }
+  .Nav-Bar.active .Nav-Close{
+    display: flex;
+  }
+}

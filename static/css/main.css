@@ -1,0 +1,25 @@
+/* === BASE === */
+@import url("./base/variables.css");
+@import url("./base/reset.css");
+@import url("./base/typography.css");
+@import url("./base/layout.css");
+
+
+
+/* === COMPONENTS === */
+@import url("./components/button-flash.css");
+@import url("./components/navbar.css");
+@import url("./components/sidebar.css");
+@import url("./components/footer.css");
+
+
+
+/* === PAGES === */
+@import url("./auth.css");
+@import url("./pages/admin.css");
+@import url("./pages/beranda.css");
+@import url("./pages/aktivitas.css");
+@import url("./pages/paparan.css");
+@import url("./pages/daerah.css");
+@import url("./pages/riwayat.css");
+@import url("./pages/panduan.css");

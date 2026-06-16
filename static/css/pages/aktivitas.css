@@ -1,0 +1,190 @@
+/* =========================
+   TAMPILAN PC
+========================= */
+.Page-Aktivitas {
+  width: 95%;
+  margin: auto;
+  padding: 0;
+}
+
+/* === FORM === */
+.Aktivitas-Form {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+/* === GRID === */
+.Aktivitas-Top-Grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 17px;
+  align-items: end;
+}
+
+.Aktivitas-Satuan-Group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 17px;
+}
+
+.Aktivitas-Row-Tanggal {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 17px;
+}
+
+.Aktivitas-Label {
+  color: var(--color-blue);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.Aktivitas-Input,
+.Aktivitas-Select {
+  width: 100%;
+  min-height: 25px;
+  padding: 7px 17px;
+  border: 3px solid var(--color-blue);
+  border-radius: 17px;
+  background-color: var(--color-offwhite);
+  color: var(--color-blue);
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  outline: none;
+}
+
+.Aktivitas-Input::placeholder {
+  color: var(--color-grey);
+}
+
+.Aktivitas-Select {
+  cursor: pointer;
+}
+
+.Aktivitas-Input:focus,
+.Aktivitas-Select:focus {
+  border-color: var(--color-yellow);
+}
+
+/* === RADIOISOTOP === */
+.Aktivitas-Option-Group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 13px;
+}
+
+.Aktivitas-Option {
+  position: relative;
+  cursor: pointer;
+}
+
+.Aktivitas-Option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.Aktivitas-Option span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 25px;
+  padding: 7px 21px;
+  border: 3px solid var(--color-blue);
+  border-radius: 17px;
+  background-color: var(--color-offwhite);
+  color: var(--color-blue);
+  font-size: 13px;
+  font-weight: 500;
+  transition: 300ms ease;
+}
+
+.Aktivitas-Option:hover span {
+  border-color: var(--color-yellow);
+}
+
+.Aktivitas-Option input:checked + span {
+  border-color: var(--color-yellow);
+  background-color: var(--color-yellow);
+  color: var(--color-offwhite);
+}
+
+/* === INFO === */
+.Aktivitas-Info {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 3px);
+
+  max-width: 250px;
+  padding: 7px 11px;
+
+  border-radius: 11px;
+  background-color: var(--color-blue);
+
+  color: var(--color-offwhite);
+  font-size: 11px;
+  line-height: 1.3;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition: opacity 300ms ease;
+  z-index: 50;
+}
+
+.Aktivitas-Info.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* =========================
+   TAMPILAN MOBILE
+========================= */
+@media (max-width: 600px) {
+  .Aktivitas-Form {
+    gap: 13px;
+  }
+
+  .Aktivitas-Top-Grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 13px;
+    align-items: start;
+  }
+  .Aktivitas-Top-Grid > .Input-Field:first-child {
+  grid-column: 1 / -1;
+  }
+
+  .Aktivitas-Option-Group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 7px;
+  }
+  .Aktivitas-Option span {
+    width: 100%;
+    padding: 7px;
+    text-align: center;
+  }
+
+  .Aktivitas-Row-Tanggal {
+    grid-template-columns: 1fr 1fr;
+    gap: 13px;
+  }
+
+  .Aktivitas-Input, .Aktivitas-Select {
+    padding: 7px 13px;
+    font-size: 11px;
+  }
+  .Aktivitas-Label, .Aktivitas-Option span {
+    font-size: 11px;
+  }
+  .Aktivitas-Option-Group {
+    gap: 11px;
+    justify-content: center;
+  }
+  .Aktivitas-Option span {
+    padding: 7px 13px;
+  }
+}

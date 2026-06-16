@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+  <div class="App-Wrapper">
+    {% include "components/navbar.html" %}
+
+    <div class="App-Layout">
+
+      <main class="App-Content">
+        {% block page_content %}
+        {% endblock %}
+      </main>
+
+      {% include "components/sidebar.html" %}
+    </div>
+
+    {% include "components/footer.html" %}
+  </div>
+{% endblock %}

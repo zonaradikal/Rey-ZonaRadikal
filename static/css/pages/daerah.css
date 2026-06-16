@@ -1,0 +1,90 @@
+/* =========================
+   TAMPILAN PC
+========================= */
+.Page-Daerah {
+  width: 95%;
+  margin: auto;
+  padding: 0;
+}
+
+/* === FORM === */
+.Daerah-Form {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+/* === GRID === */
+.Daerah-Grid-Utama {
+  display: grid;
+  grid-template-columns: 1.3fr .7fr 1.3fr .7fr;
+  gap: 17px;
+  align-items: end;
+}
+.Daerah-Grid-Paparan {
+  display: grid;
+  grid-template-columns: 1.3fr .7fr 1.3fr .7fr;
+  gap: 17px;
+  align-items: end;
+}
+.Daerah-Grid-Bawah {
+  display: grid;
+  grid-template-columns: minmax(0, .7fr) minmax(0, 3.5fr);
+  gap: 17px;
+  align-items: end;
+}
+
+/* === LABEL === */
+.Daerah-Label {
+  color: var(--color-blue);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* === INPUT === */
+.Daerah-Input, .Daerah-Select {
+  width: 100%;
+  min-height: 25px;
+  padding: 7px 17px;
+  border: 3px solid var(--color-blue);
+  border-radius: 17px;
+  background-color: var(--color-offwhite);
+  color: var(--color-blue);
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  outline: none;
+}
+.Daerah-Input::placeholder {
+  color: var(--color-grey);
+}
+.Daerah-Select {
+  cursor: pointer;
+}
+.Daerah-Input:focus, .Daerah-Select:focus {
+  border-color: var(--color-yellow);
+}
+
+/* =========================
+   TAMPILAN MOBILE
+========================= */
+@media (max-width: 600px) {
+  .Daerah-Form {
+    gap: 13px;
+  }
+  .Daerah-Grid-Utama, .Daerah-Grid-Paparan {
+    grid-template-columns: 1.3fr .7fr;
+    gap: 13px;
+  }
+  .Daerah-Grid-Bawah {
+    grid-template-columns: .7fr 1.3fr;
+    gap: 13px;
+  }
+  .Daerah-Input, .Daerah-Select {
+    padding: 7px 13px;
+    font-size: 11px;
+  }
+  .Daerah-Label {
+    font-size: 11px;
+  }
+}

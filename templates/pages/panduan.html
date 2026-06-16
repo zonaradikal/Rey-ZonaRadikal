@@ -1,0 +1,160 @@
+{% set bantuan_halaman = "panduan" %}
+{% extends "app_base.html" %}
+{% block title %}Panduan | Zona Radikal{% endblock %}
+
+{% block page_content %}
+{% set daftar_panduan = daftar_panduan|default([]) %}
+{% set daftar_faq = daftar_faq|default([]) %}
+
+{% set tab_order = ["umum", "aktivitas", "paparan", "daerah"] %}
+{% set label_map = {
+  "umum": "Umum",
+  "aktivitas": "Aktivitas",
+  "paparan": "Paparan",
+  "daerah": "Daerah Kerja"
+} %}
+{% set tab_aktif = request.args.get("tab", "umum") if request is defined else "umum" %}
+{% if tab_aktif not in tab_order %}{% set tab_aktif = "umum" %}{% endif %}
+
+<section class="Page Page-Panduan">
+
+  <section class="Page-Header">
+    <h1 class="Page-Title">Panduan Penggunaan</h1>
+    <p class="Page-Desc">
+      Panduan penggunaan fitur Zona Radikal serta FAQ untuk membantu menjawab pertanyaan umum pengguna.
+    </p>
+  </section>
+
+  <!-- === TAB PANDUAN === -->
+  <section class="Panduan-Tabs" aria-label="Kategori Panduan">
+    {% for kategori in tab_order %}
+
+    <button
+      type="button"
+      class="Panduan-Tab {% if tab_aktif == kategori %}is-active{% endif %}"
+      data-tab="{{ kategori }}">
+      {{ label_map.get(kategori, kategori|title) }}
+    </button>
+    
+    {% endfor %}
+  </section>
+
+  {% for kategori in tab_order %}
+
+  {% set nama_kategori = label_map.get(kategori, kategori|title) %}
+  {% set data = namespace(panduan_items=[], faq_items=[], faq_has_dasar_hukum=false) %}
+
+  {% for item in daftar_panduan %}
+    {% if item.kategori|lower|trim == kategori %}
+      {% set data.panduan_items = data.panduan_items + [item] %}
+    {% endif %}
+  {% endfor %}
+
+  {% for item in daftar_faq %}
+    {% if item.kategori|lower|trim == kategori %}
+      {% set data.faq_items = data.faq_items + [item] %}
+      {% if item.dasar_hukum is defined and item.dasar_hukum %}
+        {% set data.faq_has_dasar_hukum = true %}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+
+  <section
+    class="Panduan-Panel {% if tab_aktif == kategori %}is-active{% endif %}"
+    data-panel="{{ kategori }}">
+
+    <!-- === PANDUAN === -->
+    <section class="Panduan-Section Accordion-Section active">
+
+      <button type="button" class="Accordion-Trigger">
+        <span class="Panduan-Section-Title">Panduan {{ nama_kategori }}</span>
+      </button>
+
+      <div class="Accordion-Content">
+        {% if data.panduan_items %}
+        <div class="Panduan-Table-Wrapper">
+
+          <table class="Panduan-Table">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Judul</th>
+                <th>Panduan</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for item in data.panduan_items %}
+              <tr>
+                <td>{{ item.urutan|default(loop.index, true) }}</td>
+                <td>{{ item.judul }}</td>
+                <td>{{ item.isi }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+        </div>
+        {% else %}
+        <p class="Panduan-Empty">Belum ada data panduan untuk bagian ini.</p>
+        {% endif %}
+      </div>
+
+    </section>
+
+    <!-- === FAQ === -->
+    <section class="Faq-Section Accordion-Section">
+
+      <button type="button" class="Accordion-Trigger">
+        <span class="Faq-Section-Title">FAQ {{ nama_kategori }}</span>
+      </button>
+
+      <div class="Accordion-Content">
+        {% if data.faq_items %}
+        <div class="Faq-Table-Wrapper">
+
+          <table class="Faq-Table">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Pertanyaan</th>
+                <th>Jawaban</th>
+                {% if data.faq_has_dasar_hukum %}
+                <th>Dasar Hukum</th>
+                {% endif %}
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for item in data.faq_items %}
+              <tr>
+                <td>{{ item.urutan|default(loop.index, true) }}</td>
+                <td>{{ item.pertanyaan }}</td>
+                <td>{{ item.jawaban }}</td>
+                {% if data.faq_has_dasar_hukum %}
+                <td>
+                  {% if item.dasar_hukum is defined and item.dasar_hukum %}
+                    {{ item.dasar_hukum }}
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+                {% endif %}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+        </div>
+        {% else %}
+        <p class="Faq-Empty">Belum ada FAQ untuk bagian ini.</p>
+        {% endif %}
+      </div>
+
+    </section>
+
+  </section>
+  {% endfor %}
+
+</section>
+{% endblock %}
