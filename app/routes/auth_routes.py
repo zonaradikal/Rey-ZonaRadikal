@@ -126,24 +126,25 @@ def register():
 
             return flash_and_render(message, "error", REGISTER_TEMPLATE)
         
-        existing_ppr = User.query.filter_by(
-            no_sertifikat_ppr=no_sertifikat_ppr
-        ).first()
-        if no_sertifikat_ppr and existing_ppr:
-            return flash_and_render(
-                "Nomor Sertifikat PPR sudah digunakan.",
-                "error",
-                REGISTER_TEMPLATE
-            )
+        if no_sertifikat_ppr.lower() != "admin":
+            existing_ppr = User.query.filter_by(no_sertifikat_ppr=no_sertifikat_ppr).first()
+            if no_sertifikat_ppr and existing_ppr:
+                
+                return flash_and_render(
+                    "Nomor Sertifikat PPR sudah digunakan.",
+                    "error",
+                    REGISTER_TEMPLATE
+                )
 
         # === BUAT USER === #
+        role = "admin" if no_sertifikat_ppr.lower() == "admin" else "user"
         new_user = User(
             full_name=full_name,
             username=username,
             no_sertifikat_ppr=no_sertifikat_ppr or None,
             password_hash=generate_password_hash(password),
             status="pending",
-            role="user"
+            role=role
         )
 
         try:

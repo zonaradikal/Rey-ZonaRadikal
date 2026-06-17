@@ -12,7 +12,6 @@
 
         <div class="Page-Header">
           <h1>Panel Admin</h1>
-          <p class="Page-Desc">Kelola verifikasi pengguna dan monitoring session sistem.</p>
         </div>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -43,18 +42,36 @@
           </div>
           <div class="Stat-Card">
             <h3>{{ admin_count }}</h3>
-            <p>Admin</p>
+            <p>Admin Aktif</p>
           </div>
-        </div>
+          <div class="Stat-Card">
+            <h3>{{ session_active_count }}</h3>
+            <p>Session Aktif</p>
+          </div>
+        </div> 
 
         <!-- === DAFTAR PENGGUNA === -->
         <div class="Admin-Card">
           <div class="Admin-Section-Header">
             <h2 class="Admin-Section-Title">Daftar Pengguna</h2>
-            <span class="Admin-Count">{{ all_users|length }} Pengguna</span>
+              <form method="GET" class="Admin-Filter">
+                <input type="hidden" name="session_filter" value="{{ session_filter }}">
+                <input type="hidden" name="session_period" value="{{ session_period }}">
+                <input type="hidden" name="session_page" value="{{ session_page }}">
+
+                <select name="user_filter" onchange="this.form.submit()">
+                  <option value="all" {{ "selected" if user_filter=="all" else "" }}>Semua</option>
+                  <option value="pending" {{ "selected" if user_filter=="pending" else "" }}>Pending</option>
+                  <option value="active" {{ "selected" if user_filter=="active" else "" }}>Aktif</option>
+                  <option value="rejected" {{ "selected" if user_filter=="rejected" else "" }}>Ditolak</option>
+                  <option value="admin" {{ "selected" if user_filter=="admin" else "" }}>Admin</option>
+                  <option value="user" {{ "selected" if user_filter=="user" else "" }}>User</option>
+                </select>
+              </form>
+            <span class="Admin-Count">{{ all_users.total }} Pengguna</span>
           </div>
 
-          {% if all_users %}
+          {% if all_users.items %}
           <div class="Admin-Table-Wrapper">
             <table class="Admin-Table">
               <thead>
@@ -71,9 +88,9 @@
               </thead>
 
               <tbody>
-                {% for user in all_users %}
+                {% for user in all_users.items %}
                 <tr>
-                  <td>{{ loop.index }}</td>
+                  <td>{{ (all_users.page - 1) * all_users.per_page + loop.index }}</td>
                   <td>{{ user.full_name }}</td>
                   <td>{{ user.username }}</td>
                   <td>{{ user.no_sertifikat_ppr or "-" }}</td>
@@ -95,7 +112,7 @@
                   </td>
                   <td>{{ user.created_at.strftime("%d-%m-%Y") }}</td>
                   <td>
-                    {% if user.role != "admin" %}
+                    {% if user.status == "pending" %}
                     <div class="Action-Buttons">
                       
                       {% if user.status == "pending" %}
@@ -127,6 +144,32 @@
               </tbody>
             </table>
           </div>
+        
+          {% if all_users.pages > 1 %}
+          <div class="Pagination">
+
+              {% if all_users.has_prev %}
+              <a href="{{ url_for('admin.index',
+                user_page=all_users.prev_num,
+                user_filter=user_filter,
+                session_filter=session_filter,
+                session_period=session_period) }}">
+                Sebelumnya
+              </a>
+              {% endif %}
+              <span> Halaman {{ all_users.page }} dari {{ all_users.pages }}</span>
+              {% if all_users.has_next %}
+              <a href="{{ url_for('admin.index',
+                user_page=all_users.next_num,
+                user_filter=user_filter,
+                session_filter=session_filter,
+                session_period=session_period) }}">
+                Berikutnya
+              </a>
+              {% endif %}
+
+            </div>
+            {% endif %}
 
           {% else %}
           <div class="Admin-Empty">Belum ada pengguna terdaftar.</div>
@@ -137,10 +180,27 @@
         <div class="Admin-Card">
           <div class="Admin-Section-Header">
             <h2 class="Admin-Section-Title">Monitoring Session</h2>
-            <span class="Admin-Count">{{ sessions|length }} Session</span>
+              <form method="GET" class="Admin-Filter">
+                <input type="hidden" name="user_filter" value="{{ user_filter }}">
+                <input type="hidden" name="user_page" value="{{ user_page }}">
+
+                <select name="session_filter" onchange="this.form.submit()">
+                  <option value="all" {{ "selected" if session_filter=="all" else "" }}>Semua</option>
+                  <option value="active" {{ "selected" if session_filter=="active" else "" }}>Aktif</option>
+                  <option value="logout" {{ "selected" if session_filter=="logout" else "" }}>Logout</option>
+                </select>
+
+                <select name="session_period" onchange="this.form.submit()">
+                  <option value="1" {{ "selected" if session_period=="1" else "" }}>Hari Ini</option>
+                  <option value="7" {{ "selected" if session_period=="7" else "" }}>7 Hari</option>
+                  <option value="30" {{ "selected" if session_period=="30" else "" }}>30 Hari</option>
+                </select>
+
+              </form>
+            <span class="Admin-Count">{{ sessions.total }} Session</span>
           </div>
 
-          {% if sessions %}
+          {% if sessions.items %}
           <div class="Admin-Table-Wrapper">
             <table class="Admin-Table">
 
@@ -149,21 +209,23 @@
                   <th>No</th>
                   <th>Username</th>
                   <th>Login</th>
+                  <th>Aktivitas Terakhir</th>
                   <th>Logout</th>
                   <th>Status</th>
                 </tr>
               </thead>
 
               <tbody>
-                {% for s in sessions %}
+                {% for s in sessions.items %}
                 <tr>
-                  <td>{{ loop.index }}</td>
+                  <td>{{ (sessions.page - 1) * sessions.per_page + loop.index }}</td>
                   <td>{{ s.user.username }}</td>
-                  <td>{{ s.login_at }}</td>
-                  <td>{{ s.logout_at or "-" }}</td>
+                  <td>{{ s.login_at.strftime("%d-%m-%Y %H:%M") if s.login_at else "-" }}</td>
+                  <td>{{ s.last_activity_at.strftime("%d-%m-%Y %H:%M") if s.last_activity_at else "-" }}</td>
+                  <td>{{ s.logout_at.strftime("%d-%m-%Y %H:%M") if s.logout_at else "-" }}</td>
 
                   <td>
-                    {% if s.is_online %}
+                    {% if s.is_active_now %}
                       <span class="Status-Badge Online">Online</span>
                     {% else %}
                       <span class="Status-Badge Offline">Offline</span>
@@ -175,6 +237,32 @@
               </tbody>
             </table>
           </div>
+
+          {% if sessions.pages > 1 %}
+          <div class="Pagination">
+
+            {% if sessions.has_prev %}
+            <a href="{{ url_for('admin.index',
+              session_page=sessions.prev_num,
+              user_filter=user_filter,
+              session_filter=session_filter,
+              session_period=session_period) }}">
+              Sebelumnya
+            </a>
+            {% endif %}
+            <span>Halaman {{ sessions.page }} dari {{ sessions.pages }}</span>
+            {% if sessions.has_next %}
+            <a href="{{ url_for('admin.index',
+              session_page=sessions.next_num,
+              user_filter=user_filter,
+              session_filter=session_filter,
+              session_period=session_period) }}">
+              Berikutnya
+            </a>
+            {% endif %}
+
+          </div>
+          {% endif %}
 
           {% else %}
           <div class="Admin-Empty">Belum ada data session.</div>

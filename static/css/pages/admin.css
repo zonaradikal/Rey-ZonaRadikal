@@ -6,13 +6,11 @@
   display: flex;
   flex-direction: column;
 }
-
 .App-Layout-Admin {
   width: 100%;
   max-width: none;
   padding: 17px;
 }
-
 .App-Content-Admin {
   width: 100%;
   max-width: none;
@@ -21,7 +19,6 @@
 .Admin-Page {
   width: 100%;
 }
-
 .Admin-Page {
   display: flex;
   flex-direction: column;
@@ -30,11 +27,15 @@
 .Admin-Page .Page-Header {
   margin-bottom: 0;
 }
+.Page-Header h1{
+  text-align: center;
+  font-size: 17px;
+}
 
 /* === STATS === */
 .Admin-Stats {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   gap: 13px;
 }
 .Stat-Card {
@@ -43,14 +44,14 @@
   align-items: center;
   justify-content: center;
   gap: 3px;
-  padding: 13px;
+  padding: 7px;
   border: 3px solid var(--color-blue);
   border-radius: 13px;
-  background-color: var(--color-offwhite);
+  background-color: var(--color-cream);
 }
 .Stat-Card h3 {
   color: var(--color-blue);
-  font-size: 21px;
+  font-size: 17px;
   font-weight: 700;
 }
 .Stat-Card p {
@@ -70,6 +71,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 13px;
+  flex-wrap: wrap;
   padding: 11px 17px;
   background-color: var(--color-blue);
   border-top-left-radius: 13px;
@@ -86,6 +88,24 @@
   font-weight: 700;
 }
 
+/* === FILTER === */
+.Admin-Filter {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.Admin-Filter select {
+  height: 30px;
+  padding: 3px 7px;
+  border: 1px solid var(--color-cream);
+  border-radius: 7px;
+  background-color: var(--color-cream);
+  color: var(--color-blue);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 /* === TABLE === */
 .Admin-Table-Wrapper {
   width: 100%;
@@ -96,7 +116,7 @@
 .Admin-Table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
+  table-layout: auto;
 }
 .Admin-Table th {
   padding: 7px;
@@ -205,6 +225,32 @@
   line-height: 1.7;
 }
 
+/* === PAGINATION === */
+.Pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 13px;
+  padding: 13px;
+  background-color: var(--color-offwhite);
+  border: 3px solid var(--color-blue);
+  border-top: none;
+}
+.Pagination a {
+  padding: 3px 11px;
+  border-radius: 7px;
+  background-color: var(--color-blue);
+  color: var(--color-offwhite);
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.Pagination span {
+  color: var(--color-blue);
+  font-size: 13px;
+  font-weight: 700;
+}
+
 /* =========================
    TAMPILAN MOBILE
 ========================= */
@@ -231,6 +277,15 @@
   .Admin-Count {
     align-self: flex-end;
     font-size: 11px;
+  }
+
+  .Admin-Filter {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .Admin-Filter select {
+    flex: 1;
+    min-width: 130px;
   }
 
   .Admin-Table {

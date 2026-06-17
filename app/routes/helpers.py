@@ -1,8 +1,16 @@
-from flask import session, request
+from datetime import timedelta
+from flask import session
 from app.models.user import waktu_indonesia
 
 from app.extensions import db
 from app.models import (User, UserSession, RiwayatAktivitas, RiwayatPaparan, RiwayatDaerahRadiasi,)
+
+
+# === TIMEZONE === #
+def normalize_datetime(dt):
+    if not dt:
+        return None
+    return dt.replace(tzinfo=None)
 
 
 # === USER === #
@@ -110,6 +118,7 @@ def get_all_riwayat(user_id):
 def get_sidebar_riwayat(user_id, limit=5):
     return get_all_riwayat(user_id)[:limit]
 
+
 # === UPDATE SESSION === #
 def update_session_activity():
 
@@ -117,14 +126,23 @@ def update_session_activity():
     if not session_log_id:
         return
 
-
-    session_log = db.session.get(
-        UserSession,
-        session_log_id
-    )
+    session_log = db.session.get(UserSession, session_log_id)
     if not session_log:
         return
 
-    session_log.last_activity_at = waktu_indonesia()
+    sekarang = waktu_indonesia().replace(tzinfo=None)
+    last_activity = session_log.last_activity_at
+    if last_activity and last_activity.tzinfo is not None:
+        last_activity = last_activity.replace(tzinfo=None)
 
+    if sekarang - last_activity > timedelta(hours=3):
+
+        session_log.logout_at = last_activity + timedelta(hours=3)
+        session_log.is_online = False
+
+        db.session.commit()
+        session.clear()
+        return
+
+    session_log.last_activity_at = sekarang
     db.session.commit()
