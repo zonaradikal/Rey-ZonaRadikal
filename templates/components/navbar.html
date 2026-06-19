@@ -13,7 +13,7 @@
 
         {% if session.get("role") == "admin" %}
         <li>
-          <a href="{{ url_for('admin.index', user_filter='pending') }}" class="Nav-Notification">Admin 
+          <a href="{{ url_for('admin.index') }}" class="Nav-Notification">Admin 
           <span id="PendingBadge" class="Nav-Notification-Badge" style="display:none;">0</span>
           </a>
         </li>
