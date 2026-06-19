@@ -37,14 +37,6 @@
             <p>Pengguna Aktif</p>
           </div>
           <div class="Stat-Card">
-            <h3>{{ rejected_count }}</h3>
-            <p>Ditolak</p>
-          </div>
-          <div class="Stat-Card">
-            <h3>{{ admin_count }}</h3>
-            <p>Admin Aktif</p>
-          </div>
-          <div class="Stat-Card">
             <h3>{{ session_active_count }}</h3>
             <p>Session Aktif</p>
           </div>
@@ -223,7 +215,6 @@
                   <td>{{ s.login_at.strftime("%d-%m-%Y %H:%M") if s.login_at else "-" }}</td>
                   <td>{{ s.last_activity_at.strftime("%d-%m-%Y %H:%M") if s.last_activity_at else "-" }}</td>
                   <td>{{ s.logout_at.strftime("%d-%m-%Y %H:%M") if s.logout_at else "-" }}</td>
-
                   <td>
                     {% if s.is_active_now %}
                       <span class="Status-Badge Online">Online</span>
@@ -231,7 +222,6 @@
                       <span class="Status-Badge Offline">Offline</span>
                     {% endif %}
                   </td>
-
                 </tr>
                 {% endfor %}
               </tbody>
@@ -275,4 +265,6 @@
   </div>
   
 </div>
+
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
 {% endblock %}

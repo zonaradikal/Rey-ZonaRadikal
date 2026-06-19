@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, jsonify, request
 from datetime import timedelta
 
 from app.extensions import db
@@ -8,7 +8,6 @@ from app.routes.helpers import normalize_datetime
 from app.utils import admin_required
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
-
 
 
 # === HALAMAN ADMIN === #
@@ -27,8 +26,6 @@ def index():
     total_users = User.query.count()
     pending_count = User.query.filter_by(status="pending").count()
     active_count = User.query.filter_by(status="active").count()
-    rejected_count = User.query.filter_by(status="rejected").count()
-    admin_count = User.query.filter_by(role="admin", status="active").count()
     session_active_count = UserSession.query.filter(
         UserSession.logout_at.is_(None),
         UserSession.last_activity_at >= sekarang - timedelta(hours=3)
@@ -97,14 +94,71 @@ def index():
         total_users=total_users,
         pending_count=pending_count,
         active_count=active_count,
-        rejected_count=rejected_count,
-        admin_count=admin_count,
         session_active_count=session_active_count,
 
         all_users=all_users,
         sessions=sessions
     )
 
+
+# === DATA STATISTIK === #
+@admin_bp.route("/stats")
+@admin_required
+def stats():
+
+    sekarang = waktu_indonesia()
+
+    pending_count = User.query.filter_by(
+        status="pending"
+    ).count()
+
+    session_active_count = UserSession.query.filter(
+        UserSession.logout_at.is_(None),
+        UserSession.last_activity_at >= sekarang - timedelta(hours=3)
+    ).count()
+
+    return jsonify({
+        "pending_count": pending_count,
+        "session_active_count": session_active_count
+    })
+
+
+# === CHECK UPDATE === #
+@admin_bp.route("/check-updates")
+@admin_required
+def check_updates():
+
+    latest_user = User.query.order_by(
+        User.created_at.desc()
+    ).first()
+
+    latest_session = UserSession.query.order_by(
+        UserSession.login_at.desc()
+    ).first()
+
+    return jsonify({
+        "latest_user": (
+            latest_user.created_at.timestamp()
+            if latest_user else 0
+        ),
+        "latest_session": (
+            latest_session.login_at.timestamp()
+            if latest_session else 0
+        )
+    })
+
+
+# === PENDING USER COUNT === #
+@admin_bp.route("/pending-count")
+@admin_required
+def pending_count():
+
+    count = User.query.filter_by(
+        status="pending"
+    ).count()
+    return jsonify({
+        "count": count
+    })
 
 
 # === UBAH STATUS USER === #

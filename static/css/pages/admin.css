@@ -35,7 +35,7 @@
 /* === STATS === */
 .Admin-Stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 13px;
 }
 .Stat-Card {
@@ -251,6 +251,28 @@
   font-weight: 700;
 }
 
+/* === ADMIN NOTIFICATION === */
+.Nav-Notification {
+  position: relative;
+}
+.Nav-Notification-Badge {
+  position: absolute;
+  top: -7px;
+  right: -17px;
+  min-width: 21px;
+  height: 21px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-blue);
+  border-radius: 50%;
+  background-color: var(--color-cream);
+  color: var(--color-blue);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
 /* =========================
    TAMPILAN MOBILE
 ========================= */
@@ -298,11 +320,9 @@
   .Approve-Btn, .Reject-Btn {
     font-size: 11px;
   }
-
   .Admin-Table-Wrapper {
     overflow-x: auto;
   }
-
   .Action-Buttons {
     flex-direction: column;
     gap: 3px;
