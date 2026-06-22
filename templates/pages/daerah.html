@@ -53,11 +53,10 @@
       <div class="Daerah-Grid-Utama">
 
         <div class="Input-Field">
-          <label for="pembatas_dosis" class="Daerah-Label">Pembatas Dosis</label>
-          <input type="number" id="pembatas_dosis" name="pembatas_dosis"
-            class="Daerah-Input" step="any" min="1" max="100"
-            value="{{ pembatas_dosis_value }}">
-          <small class="Input-Info">Pembatas dosis pekerja radiasi.</small>
+          <label for="pembatas_dosis" class="Daerah-Label">Nilai Batas Dosis</label>
+          <input type="text" id="pembatas_dosis" class="Daerah-Input"
+            value="{{ pembatas_dosis_value }}" readonly>
+          <small class="Input-Info">Nilai batas dosis pekerja radiasi sesuai regulasi.</small>
         </div>
 
         <div class="Input-Field">
@@ -138,11 +137,10 @@
 
       <!-- === HITUNG RESET === -->
       <div class="Cal-Action">
-        <button type="submit" class="Button-Primary">Hitung</button>
+        <button type="submit" name="aksi" value="daerah" class="Button-Primary">Hitung</button>
         <a href="{{ url_for('main.daerah') }}" class="Button-Reset">Reset</a>
       </div>
 
-    </form>
 
     <section class="Cal-Result">
       <h2 class="Cal-Result-Title">Hasil Perhitungan Daerah Kerja</h2>
@@ -170,6 +168,74 @@
 
       </div>
     </section>
+
+    <section class="Kontaminasi-Section">
+      <h2 class="Page-Title">Analisis Potensi Kontaminasi</h2>
+
+      <div class="Kontaminasi-Grid-Atas">
+        <div class="Input-Field">
+          <label for="background_1" class="Daerah-Label">Background 1</label>
+          <input type="number" id="background_1" name="background_1" class="Daerah-Input" step="any" min="0.01" max="100000" value="{{ background_1 }}">
+        </div>
+        <div class="Input-Field">
+          <label for="background_2" class="Daerah-Label">Background 2</label>
+          <input type="number" id="background_2" name="background_2" class="Daerah-Input" step="any" min="0.01" max="100000" value="{{ background_2 }}">
+        </div>
+        <div class="Input-Field">
+          <label for="background_3" class="Daerah-Label">Background 3</label>
+          <input type="number" id="background_3" name="background_3" class="Daerah-Input" step="any" min="0.01" max="100000" value="{{ background_3 }}">
+        </div>
+      </div>
+
+      <div class="Kontaminasi-Grid-Bawah">
+        <div class="Input-Field">
+          <label for="laju_cacah_sampel" class="Daerah-Label">Laju Cacah Sampel</label>
+          <input type="number" id="laju_cacah_sampel" name="laju_cacah_sampel" class="Daerah-Input" step="any" min="0.01" max="100000" value="{{ laju_cacah_sampel }}">
+        </div>
+        <div class="Input-Field">
+          <label for="satuan_kontaminasi" class="Daerah-Label">Satuan</label>
+          <select id="satuan_kontaminasi" name="satuan_kontaminasi" class="Daerah-Input Daerah-Select">
+            <option value="cpm" {% if satuan_kontaminasi == "cpm" %}selected{% endif %}>cpm</option>
+            <option value="cps" {% if satuan_kontaminasi == "cps" %}selected{% endif %}>cps</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+      <div class="Cal-Action">
+        <button type="submit" name="aksi" value="kontaminasi" class="Button-Primary">Hitung</button>
+      </div>
+  </form>
+
+    {% if hasil_kontaminasi %}
+    <section class="Cal-Result">
+      <h2 class="Cal-Result-Title">Hasil Potensi Kontaminasi</h2>
+
+      <div class="Cal-Result-Grid">
+
+        <div class="Cal-Result-Card">
+          <span class="Cal-Result-Label">Rata-rata Background</span>
+          <span class="Cal-Result-Value">{{ hasil_kontaminasi["rata_rata"]|round(2) }}</span>
+        </div>
+
+        <div class="Cal-Result-Card">
+          <span class="Cal-Result-Label">Standar Deviasi</span>
+          <span class="Cal-Result-Value">{{ hasil_kontaminasi["standar_deviasi"]|round(2) }}</span>
+        </div>
+
+        <div class="Cal-Result-Card">
+          <span class="Cal-Result-Label">Batas Keputusan</span>
+          <span class="Cal-Result-Value">{{ hasil_kontaminasi["batas"]|round(2) }}</span>
+        </div>
+
+        <div class="Cal-Result-Card">
+          <span class="Cal-Result-Label">Potensi Kontaminasi</span>
+          <span class="Cal-Result-Value">{{ "YA" if hasil_kontaminasi["potensi_kontaminasi"] else "TIDAK" }}</span>
+        </div>
+
+      </div>
+    </section>
+    {% endif %}
 
     <section class="Page-Header">
       <h2 class="Page-Title-2">Dasar Kriteria dan Tindakan Daerah Radiasi</h2>

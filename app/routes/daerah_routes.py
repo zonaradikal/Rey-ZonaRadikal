@@ -4,7 +4,7 @@ from app.extensions import db
 from app.models import RiwayatDaerahRadiasi
 from app.routes.main_bp import main_bp
 from app.routes.helpers import get_current_user, get_sidebar_riwayat
-from app.utils import hitung_daerah_radiasi
+from app.utils import hitung_daerah_radiasi, hitung_potensi_kontaminasi
 
 # === KONSTANTA === #
 SATUAN_PAPARAN = {
@@ -24,6 +24,11 @@ def get_default_form_data():
         "jarak_acuan": 1.0,
         "faktor_okupansi": 1.0,
         "keterangan": "",
+        "background_1": "",
+        "background_2": "",
+        "background_3": "",
+        "laju_cacah_sampel": "",
+        "satuan_kontaminasi": "cpm",
     }
 
 # === REQUEST FORM === #
@@ -36,7 +41,7 @@ def get_form_data_from_request():
         satuan_paparan = "uSv/jam"
 
     return {
-        "pembatas_dosis": request.form.get("pembatas_dosis", "20").strip(),
+        "pembatas_dosis": "20",
         "jam_kerja": request.form.get("jam_kerja", "2000").strip(),
         "laju_paparan": request.form.get("laju_paparan", "").strip(),
         "satuan_paparan": request.form.get("satuan_paparan", "mSv/jam").strip(),
@@ -44,6 +49,11 @@ def get_form_data_from_request():
         "satuan_jarak_acuan": "m",
         "faktor_okupansi": request.form.get("faktor_okupansi", "1").strip(),
         "keterangan": request.form.get("keterangan", "").strip(),
+        "background_1": request.form.get("background_1", "").strip(),
+        "background_2": request.form.get("background_2", "").strip(),
+        "background_3": request.form.get("background_3", "").strip(),
+        "laju_cacah_sampel": request.form.get("laju_cacah_sampel", "").strip(),
+        "satuan_kontaminasi": request.form.get("satuan_kontaminasi", "cpm").strip(),
     }
 
 # === VALIDASI FORM === #
@@ -100,6 +110,7 @@ def daerah():
     hasil = None
     hasil_pengendalian = None
     hasil_supervisi = None
+    hasil_kontaminasi = None
 
     # === PROSES POST === #
     if request.method == "POST":
@@ -107,69 +118,74 @@ def daerah():
 
             # === VALIDASI INPUT === #
             form_data = get_form_data_from_request()
-            validasi_form_daerah(form_data)
+            aksi = request.form.get("aksi")
 
-            # === HITUNG DAERAH === #
-            data_hitung = hitung_daerah_radiasi(
-                pembatas_dosis=form_data["pembatas_dosis"],
-                jam_kerja=form_data["jam_kerja"],
-                laju_paparan=form_data["laju_paparan"],
-                satuan_paparan=form_data["satuan_paparan"],
-                jarak_acuan=form_data["jarak_acuan"],
-                satuan_jarak_acuan=form_data["satuan_jarak_acuan"],
-                faktor_okupansi=form_data["faktor_okupansi"],
-            )
+            if aksi == "daerah":
+                data_hitung = hitung_daerah_radiasi(
+                    jam_kerja=form_data["jam_kerja"],
+                    laju_paparan=form_data["laju_paparan"],
+                    satuan_paparan=form_data["satuan_paparan"],
+                    jarak_acuan=form_data["jarak_acuan"],
+                    satuan_jarak_acuan=form_data["satuan_jarak_acuan"],
+                    faktor_okupansi=form_data["faktor_okupansi"],
+                )
 
-            # === HASIL DAN SIMPAN RIWAYAT === #
-            hasil_pengendalian = data_hitung["hasil_pengendalian"]
-            hasil_supervisi = data_hitung["hasil_supervisi"]
+                hasil_pengendalian = data_hitung["hasil_pengendalian"]
+                hasil_supervisi = data_hitung["hasil_supervisi"]
 
-            hasil = {
-                "pembatas_dosis": data_hitung["pembatas_dosis"],
-                "jam_kerja": data_hitung["jam_kerja"],
-                "laju_paparan": data_hitung["laju_paparan"],
-                "satuan_paparan": format_satuan_paparan(data_hitung["satuan_paparan"]),
-                "laju_paparan_msv": data_hitung["laju_paparan_msv"],
-                "jarak_acuan": data_hitung["jarak_acuan"],
-                "faktor_okupansi": data_hitung["faktor_okupansi"],
-                "batas_pengendalian_tahun": data_hitung["batas_pengendalian_tahun"],
-                "batas_supervisi_tahun": data_hitung["batas_supervisi_tahun"],
-                "batas_pengendalian_jam": data_hitung["batas_pengendalian_jam"],
-                "batas_supervisi_jam": data_hitung["batas_supervisi_jam"],
-                "hasil_pengendalian": format_hasil_angka(data_hitung["hasil_pengendalian"]),
-                "hasil_supervisi": format_hasil_angka(data_hitung["hasil_supervisi"]),
-                "estimasi_dosis_tahun": data_hitung["estimasi_dosis_tahun"],
-            }
+                hasil = {
+                    "pembatas_dosis": data_hitung["pembatas_dosis"],
+                    "jam_kerja": data_hitung["jam_kerja"],
+                    "laju_paparan": data_hitung["laju_paparan"],
+                    "satuan_paparan": format_satuan_paparan(data_hitung["satuan_paparan"]),
+                    "laju_paparan_msv": data_hitung["laju_paparan_msv"],
+                    "jarak_acuan": data_hitung["jarak_acuan"],
+                    "faktor_okupansi": data_hitung["faktor_okupansi"],
+                    "batas_pengendalian_tahun": data_hitung["batas_pengendalian_tahun"],
+                    "batas_supervisi_tahun": data_hitung["batas_supervisi_tahun"],
+                    "batas_pengendalian_jam": data_hitung["batas_pengendalian_jam"],
+                    "batas_supervisi_jam": data_hitung["batas_supervisi_jam"],
+                    "hasil_pengendalian": format_hasil_angka(data_hitung["hasil_pengendalian"]),
+                    "hasil_supervisi": format_hasil_angka(data_hitung["hasil_supervisi"]),
+                    "estimasi_dosis_tahun": data_hitung["estimasi_dosis_tahun"],
+                }
 
-            riwayat_baru = RiwayatDaerahRadiasi(
-                user_id=user.id,
-                pembatas_dosis=data_hitung["pembatas_dosis"],
-                jam_kerja=data_hitung["jam_kerja"],
+                riwayat_baru = RiwayatDaerahRadiasi(
+                    user_id=user.id,
+                    pembatas_dosis=data_hitung["pembatas_dosis"],
+                    jam_kerja=data_hitung["jam_kerja"],
+                    laju_paparan=data_hitung["laju_paparan"],
+                    satuan_paparan=data_hitung["satuan_paparan"],
+                    laju_paparan_msv=data_hitung["laju_paparan_msv"],
+                    jarak_acuan=data_hitung["jarak_acuan"],
+                    satuan_jarak_acuan=form_data["satuan_jarak_acuan"],
+                    faktor_okupansi=data_hitung["faktor_okupansi"],
+                    batas_pengendalian_tahun=data_hitung["batas_pengendalian_tahun"],
+                    batas_supervisi_tahun=data_hitung["batas_supervisi_tahun"],
+                    batas_pengendalian_jam=data_hitung["batas_pengendalian_jam"],
+                    batas_supervisi_jam=data_hitung["batas_supervisi_jam"],
+                    hasil_pengendalian=data_hitung["hasil_pengendalian"],
+                    hasil_supervisi=data_hitung["hasil_supervisi"],
+                    estimasi_dosis_tahun=data_hitung["estimasi_dosis_tahun"],
+                    keterangan=form_data["keterangan"] or None,
+                )
 
-                laju_paparan=data_hitung["laju_paparan"],
-                satuan_paparan=data_hitung["satuan_paparan"],
-                laju_paparan_msv=data_hitung["laju_paparan_msv"],
-                jarak_acuan=data_hitung["jarak_acuan"],
-                satuan_jarak_acuan=form_data["satuan_jarak_acuan"],
-                faktor_okupansi=data_hitung["faktor_okupansi"],
+                db.session.add(riwayat_baru)
+                db.session.commit()
+                sidebar_riwayat = get_sidebar_riwayat(user.id)
 
-                batas_pengendalian_tahun=data_hitung["batas_pengendalian_tahun"],
-                batas_supervisi_tahun=data_hitung["batas_supervisi_tahun"],
-                batas_pengendalian_jam=data_hitung["batas_pengendalian_jam"],
-                batas_supervisi_jam=data_hitung["batas_supervisi_jam"],
+                flash("Perhitungan daerah berhasil dan riwayat telah disimpan.", "success")
 
-                hasil_pengendalian=data_hitung["hasil_pengendalian"],
-                hasil_supervisi=data_hitung["hasil_supervisi"],
-                estimasi_dosis_tahun=data_hitung["estimasi_dosis_tahun"],
-                keterangan=form_data["keterangan"] or None,
-            )
+            elif aksi == "kontaminasi":
 
-            db.session.add(riwayat_baru)
-            db.session.commit()
-            sidebar_riwayat = get_sidebar_riwayat(user.id)
+                hasil_kontaminasi = hitung_potensi_kontaminasi(
+                    background_1=form_data["background_1"],
+                    background_2=form_data["background_2"],
+                    background_3=form_data["background_3"],
+                    laju_cacah_sampel=form_data["laju_cacah_sampel"],
+                )
 
-            # === FLASH SUCCESS === #
-            flash("Perhitungan daerah berhasil dan riwayat telah disimpan.", "success")
+                flash("Perhitungan potensi kontaminasi berhasil.", "success")
 
         # === ERROR VALIDASI === #
         except ValueError as error:
@@ -178,6 +194,7 @@ def daerah():
             hasil = None
             hasil_pengendalian = None
             hasil_supervisi = None
+            hasil_kontaminasi = None
 
         # === ERROR SISTEM === #
         except Exception as error:
@@ -186,7 +203,7 @@ def daerah():
             hasil = None
             hasil_pengendalian = None
             hasil_supervisi = None
-
+            hasil_kontaminasi = None
 
     # === RENDER PAGE === #
     return render_template(
@@ -207,4 +224,10 @@ def daerah():
         hasil_pengendalian=hasil_pengendalian,
         hasil_supervisi=hasil_supervisi,
         satuan_paparan_list=SATUAN_PAPARAN,
+        hasil_kontaminasi=hasil_kontaminasi,
+        background_1=form_data["background_1"],
+        background_2=form_data["background_2"],
+        background_3=form_data["background_3"],
+        laju_cacah_sampel=form_data["laju_cacah_sampel"],
+        satuan_kontaminasi=form_data["satuan_kontaminasi"],
     )

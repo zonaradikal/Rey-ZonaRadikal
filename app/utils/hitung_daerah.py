@@ -1,10 +1,11 @@
-import math
+import math, statistics
 
 from app.utils.konversi import (
     konversi_jarak_ke_meter,
     konversi_paparan_ke_msv_per_jam,
 )
 
+NILAI_BATAS_DOSIS = 20.0
 
 # === VALIDASI NILAI === #
 def validasi_nilai_positif(nilai, nama_field, nilai_minimum, nilai_maksimum):
@@ -33,7 +34,6 @@ def validasi_faktor_okupansi(faktor_okupansi):
 
 # === PERHITUNGAN DAERAH RADIASI === #
 def hitung_daerah_radiasi(
-    pembatas_dosis,
     jam_kerja,
     laju_paparan,
     satuan_paparan,
@@ -45,7 +45,6 @@ def hitung_daerah_radiasi(
     if not satuan_paparan:
         raise ValueError("Satuan laju paparan wajib dipilih.")
 
-    pembatas_dosis = validasi_nilai_positif(pembatas_dosis, "Pembatas dosis", 1, 100)
     jam_kerja = validasi_nilai_positif(jam_kerja, "Jam kerja", 1, 5000)
     laju_paparan = validasi_nilai_positif(laju_paparan, "Laju paparan", 0.001, 500)
     jarak_acuan = validasi_nilai_positif(jarak_acuan, "Jarak acuan", 1, 100)
@@ -64,8 +63,8 @@ def hitung_daerah_radiasi(
     if laju_paparan_msv <= 0:
         raise ValueError("Laju paparan hasil konversi harus lebih dari 0.")
 
-    batas_pengendalian_tahun = 0.3 * pembatas_dosis
-    batas_supervisi_tahun = 0.05 * pembatas_dosis
+    batas_pengendalian_tahun = 0.3 * NILAI_BATAS_DOSIS
+    batas_supervisi_tahun = 0.05 * NILAI_BATAS_DOSIS
     batas_pengendalian_jam = (batas_pengendalian_tahun / jam_kerja / faktor_okupansi)
     batas_supervisi_jam = (batas_supervisi_tahun / jam_kerja / faktor_okupansi)
 
@@ -75,7 +74,7 @@ def hitung_daerah_radiasi(
 
 
     return {
-        "pembatas_dosis": pembatas_dosis,
+        "pembatas_dosis": NILAI_BATAS_DOSIS,
         "jam_kerja": jam_kerja,
         "laju_paparan": laju_paparan,
         "satuan_paparan": satuan_paparan,
@@ -92,4 +91,38 @@ def hitung_daerah_radiasi(
         "hasil_supervisi": hasil_supervisi,
         "estimasi_dosis_tahun": estimasi_dosis_tahun,
         "satuan_hasil": "m",
+    }
+
+# === POTENSI KONTAMINASI === #
+def hitung_potensi_kontaminasi(
+    background_1,
+    background_2,
+    background_3,
+    laju_cacah_sampel
+):
+    background_1 = validasi_nilai_positif(background_1, "Background 1", 0.01, 100000)
+    background_2 = validasi_nilai_positif(background_2, "Background 2", 0.01, 100000)
+    background_3 = validasi_nilai_positif(background_3, "Background 3", 0.01, 100000)
+    laju_cacah_sampel = validasi_nilai_positif(laju_cacah_sampel, "Laju cacah sampel", 0.01, 100000)
+
+    data_background = [
+        background_1,
+        background_2,
+        background_3,
+    ]
+
+    rata_rata = statistics.mean(data_background)
+    standar_deviasi = statistics.stdev(data_background)
+    batas = rata_rata + (3 * standar_deviasi)
+    potensi_kontaminasi = laju_cacah_sampel > batas
+
+    return {
+        "background_1": background_1,
+        "background_2": background_2,
+        "background_3": background_3,
+        "rata_rata": rata_rata,
+        "standar_deviasi": standar_deviasi,
+        "batas": batas,
+        "laju_cacah_sampel": laju_cacah_sampel,
+        "potensi_kontaminasi": potensi_kontaminasi,
     }

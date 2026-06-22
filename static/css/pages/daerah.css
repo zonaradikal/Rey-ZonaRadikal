@@ -65,6 +65,20 @@
   border-color: var(--color-yellow);
 }
 
+.Kontaminasi-Section {
+  margin-top:30px;
+}
+.Kontaminasi-Grid-Atas {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:21px;
+}
+.Kontaminasi-Grid-Bawah {
+  display:grid;
+  grid-template-columns:3fr 1fr;
+  gap:21px;margin-top:21px;}
+
+  
 /* =========================
    TAMPILAN MOBILE
 ========================= */
@@ -80,6 +94,7 @@
     grid-template-columns: .7fr 1.3fr;
     gap: 13px;
   }
+  
   .Daerah-Input, .Daerah-Select {
     padding: 7px 13px;
     font-size: 11px;

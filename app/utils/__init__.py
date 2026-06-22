@@ -22,7 +22,7 @@ from app.utils.konversi import (
 )
 from app.utils.hitung_aktivitas import hitung_aktivitas_sumber
 from app.utils.hitung_paparan import hitung_laju_paparan
-from app.utils.hitung_daerah import hitung_daerah_radiasi
+from app.utils.hitung_daerah import hitung_daerah_radiasi, hitung_potensi_kontaminasi
 
 
 __all__ = [
@@ -49,4 +49,5 @@ __all__ = [
     "hitung_aktivitas_sumber",
     "hitung_laju_paparan",
     "hitung_daerah_radiasi",
+    "hitung_potensi_kontaminasi",
 ]
