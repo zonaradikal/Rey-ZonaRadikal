@@ -121,6 +121,7 @@ def daerah():
             aksi = request.form.get("aksi")
 
             if aksi == "daerah":
+                validasi_form_daerah(form_data)
                 data_hitung = hitung_daerah_radiasi(
                     jam_kerja=form_data["jam_kerja"],
                     laju_paparan=form_data["laju_paparan"],

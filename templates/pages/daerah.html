@@ -47,8 +47,8 @@
       </div>
     </section>
 
-    <form method="POST" action="{{ url_for('main.daerah') }}" class="Daerah-Form">
-
+  <form method="POST" action="{{ url_for('main.daerah') }}" class="Daerah-Form">
+    <section>
       <!-- === DATA DASAR === -->
       <div class="Daerah-Grid-Utama">
 
@@ -137,10 +137,12 @@
 
       <!-- === HITUNG RESET === -->
       <div class="Cal-Action">
-        <button type="submit" name="aksi" value="daerah" class="Button-Primary">Hitung</button>
+        <input type="hidden" name="aksi" value="daerah">
+        <button type="submit" class="Button-Primary">Hitung</button>
         <a href="{{ url_for('main.daerah') }}" class="Button-Reset">Reset</a>
       </div>
-
+    </section>
+  </form>
 
     <section class="Cal-Result">
       <h2 class="Cal-Result-Title">Hasil Perhitungan Daerah Kerja</h2>
@@ -169,6 +171,7 @@
       </div>
     </section>
 
+  <form method="POST" action="{{ url_for('main.daerah') }}">
     <section class="Kontaminasi-Section">
       <h2 class="Page-Title">Analisis Potensi Kontaminasi</h2>
 
@@ -200,10 +203,10 @@
           </select>
         </div>
       </div>
-    </section>
 
+      <input type="hidden" name="aksi" value="kontaminasi">
       <div class="Cal-Action">
-        <button type="submit" name="aksi" value="kontaminasi" class="Button-Primary">Hitung</button>
+        <button type="submit" class="Button-Primary">Hitung</button>
       </div>
   </form>
 
